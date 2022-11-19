@@ -1,0 +1,14 @@
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\bin\Debug\net6.0\MISA.QLTS.COMMON.deps.json
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\bin\Debug\net6.0\MISA.QLTS.COMMON.dll
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\bin\Debug\net6.0\MISA.QLTS.COMMON.pdb
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.csproj.AssemblyReference.cache
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.Resources.resources
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.csproj.GenerateResource.cache
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.AssemblyInfoInputs.cache
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.AssemblyInfo.cs
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.csproj.CoreCompileInputs.cache
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.dll
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\refint\MISA.QLTS.COMMON.dll
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\MISA.QLTS.COMMON.pdb
+C:\Users\thinh\source\repos\MISA.QLTS\MISA.QLTS.COMMON\obj\Debug\net6.0\ref\MISA.QLTS.COMMON.dll

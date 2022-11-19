@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "GlGhnbiAZZypELkaVUhApujOI2yASzkGy7Aa2ClO0mA+ayaYg1KRhYQBb8UfvFsFvjeH0lycwz4Hsy5V3fnW1A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\MISA.QLTS.BL.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\thinh\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\thinh\\.nuget\\packages\\mysqlconnector\\2.2.0\\mysqlconnector.2.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}

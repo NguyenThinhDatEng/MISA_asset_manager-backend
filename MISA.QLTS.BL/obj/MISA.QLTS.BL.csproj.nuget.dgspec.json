@@ -1,0 +1,194 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\MISA.QLTS.BL.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\MISA.QLTS.BL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\MISA.QLTS.BL.csproj",
+        "projectName": "MISA.QLTS.BL",
+        "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\MISA.QLTS.BL.csproj",
+        "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.BL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj": {
+                "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj"
+              },
+              "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\MISA.QLTS.DL.csproj": {
+                "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\MISA.QLTS.DL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj",
+        "projectName": "MISA.QLTS.Common",
+        "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj",
+        "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\MISA.QLTS.DL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\MISA.QLTS.DL.csproj",
+        "projectName": "MISA.QLTS.DL",
+        "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\MISA.QLTS.DL.csproj",
+        "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.DL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj": {
+                "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
