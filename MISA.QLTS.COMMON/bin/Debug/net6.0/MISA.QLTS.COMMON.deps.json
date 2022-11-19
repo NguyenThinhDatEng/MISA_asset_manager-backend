@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "MISA.QLTS.COMMON/1.0.0": {
+      "MISA.QLTS.Common/1.0.0": {
         "runtime": {
-          "MISA.QLTS.COMMON.dll": {}
+          "MISA.QLTS.Common.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "MISA.QLTS.COMMON/1.0.0": {
+    "MISA.QLTS.Common/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
