@@ -3,9 +3,8 @@
     /// <summary>
     /// Thong tin tai san
     /// </summary>
-    public class FixedAsset
+    public class FixedAsset : BaseEntity
     {
-        #region Property
         /// <summary>
         /// ID tai san
         /// </summary>
@@ -85,26 +84,5 @@
         /// Ngay su dung tai san
         /// </summary>
         public DateTime production_date { get; set; }
-
-        /// <summary>
-        /// Ngay tao thong tin
-        /// </summary>
-        public DateTime created_date { get; set; }
-
-        /// <summary>
-        /// Nguoi tao thong tin
-        /// </summary>
-        public string created_by { get; set; }
-
-        /// <summary>
-        /// Ngay chinh sua thong tin
-        /// </summary>
-        public DateTime modified_date { get; set; }
-
-        /// <summary>
-        /// Nguoi chinh sua thong tin
-        /// </summary>
-        public string modified_by { get; set; }
-        #endregion
     }
 }

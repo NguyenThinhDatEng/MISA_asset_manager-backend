@@ -4,7 +4,7 @@ using MISA.QLTS.DL;
 
 namespace MISA.QLTS.BL
 {
-    public class FixedAssetBL : IFixedAssetBL
+    public class FixedAssetBL : BaseBL<FixedAsset>, IFixedAssetBL
     {
         #region Field
 
@@ -14,7 +14,7 @@ namespace MISA.QLTS.BL
 
         #region Constructor
 
-        public FixedAssetBL(IFixedAssetDL fixedAssetDL)
+        public FixedAssetBL(IFixedAssetDL fixedAssetDL) : base(fixedAssetDL)
         {
             _fixedAssetDL = fixedAssetDL;
         }
@@ -22,26 +22,6 @@ namespace MISA.QLTS.BL
         #endregion
 
         #region GET
-        /// <summary>
-        /// Lấy thông tin tất cả tài sản
-        /// </summary>
-        /// <returns>Danh sách tài sản</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public IEnumerable<dynamic> GetAllFixedAsset()
-        {
-            return _fixedAssetDL.GetAllFixedAsset();
-        }
-
-        /// <summary>
-        /// Lấy thông tin 1 tài sản theo ID
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản muốn lấy</param>
-        /// <returns>Thông tin 1 nhân viên theo ID</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public FixedAsset GetFixedAssetByID(Guid fixedAssetID)
-        {
-            return _fixedAssetDL.GetFixedAssetByID(fixedAssetID);
-        }
 
         /// <summary>
         /// API lấy mã tài sản cố định mới

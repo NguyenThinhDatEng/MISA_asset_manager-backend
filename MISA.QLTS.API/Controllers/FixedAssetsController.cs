@@ -6,12 +6,12 @@ using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Entitites.DTO;
 using MySqlConnector;
 using MISA.QLTS.DL;
+using MISA.QLTS.API.Controllers;
 
 namespace MISA.QLTS.COMMON.Controllers
 {
-    [Route("api/v1/[controller]")]  // attribute 01
-    [ApiController] // attribute 02
-    public class FixedAssetsController : ControllerBase
+    [ApiController]
+    public class FixedAssetsController : BasesController<FixedAsset>
     {
         #region Field
 
@@ -21,7 +21,7 @@ namespace MISA.QLTS.COMMON.Controllers
 
         #region Constructor
 
-        public FixedAssetsController(IFixedAssetBL fixedAssetBL)
+        public FixedAssetsController(IFixedAssetBL fixedAssetBL) : base(fixedAssetBL)
         {
             _fixedAssetBL = fixedAssetBL;
         }
@@ -31,78 +31,6 @@ namespace MISA.QLTS.COMMON.Controllers
         #region Method
 
         #region GET
-
-        /// <summary>
-        /// API Lấy tất cả tài sản cố định
-        /// </summary>
-        /// <returns>Danh sách tất cả tài sản cố định</returns>
-        /// Author: Nguyen Van Thinh 11/11/2022
-        [HttpGet]
-        public IActionResult GetAllFixedAssets()
-        {
-            try
-            {
-                // Gọi đến Business Layer
-                var fixedAssetList = _fixedAssetBL.GetAllFixedAsset();
-                // Thành công
-                if (fixedAssetList != null)
-                    return StatusCode(StatusCodes.Status200OK, fixedAssetList);
-                // Thất bại
-                return StatusCode(StatusCodes.Status404NotFound, new
-                {
-                    ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = "Not Found",
-                    UserMsg = "Không tìm thấy dữ liệu"
-                });
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
-                {
-                    ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception!",
-                    UserMsg = "Vui lòng liên hệ MISA",
-                    TraceID = HttpContext.TraceIdentifier,
-                });
-            }
-        }
-
-        /// <summary>
-        /// API Lấy thông tin 1 tài sản cố định theo ID
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản muốn lấy thông tin</param>
-        /// <returns>Thông tin tài sản</returns>
-        [HttpGet("{fixedAssetID}")]
-        public IActionResult GetFixedAssetByID([FromRoute] Guid fixedAssetID)
-        {
-            try
-            {
-                // Gọi đến Business Layer
-                var fixedAsset = _fixedAssetBL.GetFixedAssetByID(fixedAssetID);
-                // Xử lý kết quả trả về
-                if (fixedAsset != null)
-                    // Thành công
-                    return StatusCode(StatusCodes.Status200OK, fixedAsset);
-                // Thất bại
-                return StatusCode(StatusCodes.Status404NotFound, new
-                {
-                    ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = "Not Found",
-                    UserMsg = "Không tìm thấy bản ghi"
-                });
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
-                {
-                    ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception!",
-                    UserMsg = "Vui lòng liên hệ MISA",
-                    TraceID = HttpContext.TraceIdentifier,
-                });
-            }
-
-        }
 
         /// <summary>
         /// API lấy tài sản theo bộ lọc và phân trang
@@ -262,7 +190,7 @@ namespace MISA.QLTS.COMMON.Controllers
                     {
                         ErrorCode = QLTSErrorCode.BadRequest,
                         DevMsg = "Bad request",
-                        UserMsg = "",
+                        UserMsg = "Có ID không phù hợp trong danh sách ID",
                     });
             }
             catch (Exception ex)

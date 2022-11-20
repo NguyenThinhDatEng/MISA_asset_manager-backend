@@ -5,60 +5,9 @@ using MySqlConnector;
 
 namespace MISA.QLTS.DL
 {
-    public class FixedAssetDL : IFixedAssetDL
+    public class FixedAssetDL : BaseDL<FixedAsset>, IFixedAssetDL
     {
         #region GET
-
-        /// <summary>
-        /// Lấy thông tin tất cả tài sản
-        /// </summary>
-        /// <returns>Danh sách tài sản</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public IEnumerable<dynamic> GetAllFixedAsset()
-        {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
-
-            // Chuẩn bị tên Stored procedure
-            string procedureName = "Proc_GetAllAsset";
-
-            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var fixedAssets = mySqlConnection.Query(procedureName, commandType: System.Data.CommandType.StoredProcedure);
-
-            // Xử lý kết quả trả về từ Database
-            if (fixedAssets != null)
-                return fixedAssets;
-            return new List<FixedAsset>();
-        }
-
-        /// <summary>
-        /// Lấy thông tin 1 tài sản theo ID
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản muốn lấy</param>
-        /// <returns>Thông tin 1 nhân viên theo ID</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public FixedAsset GetFixedAssetByID(Guid fixedAssetID)
-        {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
-
-            // Chuẩn bị câu lệnh SQL
-            string procedureName = "Proc_GetFixedAssetByID";
-
-            //Chuẩn bị tham số đầu vào
-            var parameters = new DynamicParameters();
-            parameters.Add("@fixedAssetID", fixedAssetID);
-
-            //Thực hiện gọi vào DB
-            var fixedAsset = mySqlConnection.QueryFirstOrDefault<FixedAsset>(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-
-            //Xử lý kết quả trả về
-            // Thành công
-            if (fixedAsset != null)
-                return fixedAsset;
-            // Thất bại
-            return null;
-        }
 
         /// <summary>
         /// API lấy mã tài sản cố định mới
@@ -154,25 +103,43 @@ namespace MISA.QLTS.DL
         public bool DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
         {
             //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                mySqlConnection.Open();
 
-            // Chuẩn bị câu lệnh SQL
-            string procedureName = "Proc_DeleteMultipleFixedAsset";
+                // Khởi tạo transaction
+                var transaction = mySqlConnection.BeginTransaction();
 
-            //Chuẩn bị tham số đầu vào
-            var parameters = new DynamicParameters();
-            string IDs = "";
-            var list = fixedAssetIDs.FixedAssetIDs;
-            for (int i = 0; i < list.Count; i++)
-                IDs += "\'" + list[i] + "\',";
-            IDs = IDs.Remove(IDs.Length - 1);
-            Console.WriteLine(IDs);
-            parameters.Add("@IDs", IDs);
+                try
+                {
+                    // Chuẩn bị câu lệnh SQL
+                    string procedureName = "Proc_DeleteMultipleFixedAsset";
 
-            //Thực hiện gọi vào DB
-            mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                    // Chuẩn bị tham số đầu vào
+                    var parameters = new DynamicParameters();
+                    string IDs = "";
+                    var list = fixedAssetIDs.FixedAssetIDs;
+                    for (int i = 0; i < list.Count; i++)
+                        IDs += "\'" + list[i] + "\',";
+                    IDs = IDs.Remove(IDs.Length - 1);
+                    Console.WriteLine(IDs);
+                    parameters.Add("@IDs", IDs);
 
-            return true;
+                    // Thực hiện gọi vào DB
+                    mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure, transaction: transaction);
+
+                    // Cam kết thực hiện thành công
+                    transaction.Commit();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+
+                    return false;
+                }
+            }
         }
 
         #endregion
@@ -221,7 +188,7 @@ namespace MISA.QLTS.DL
             var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
             return numberOfRowsAffected;
-        } 
+        }
 
         #endregion
 

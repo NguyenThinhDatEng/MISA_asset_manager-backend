@@ -5,7 +5,6 @@
     /// </summary>
     public class FixedAssetCategory
     {
-        #region Property
         /// <summary>
         /// ID loại tài sản
         /// </summary>
@@ -30,26 +29,5 @@
         /// Ti le hao mon
         /// </summary>
         public float? depreciation_rate { get; set; }
-
-        /// <summary>
-        /// Ngay tao thong tin
-        /// </summary>
-        public DateTime created_date { get; set; }
-
-        /// <summary>
-        /// Nguoi tao thong tin
-        /// </summary>
-        public string created_by { get; set; }
-
-        /// <summary>
-        /// Ngay chinh sua thong tin
-        /// </summary>
-        public DateTime modified_date { get; set; }
-
-        /// <summary>
-        /// Nguoi chinh sua thong tin
-        /// </summary>
-        public string modified_by { get; set; }
-        #endregion
     }
 }

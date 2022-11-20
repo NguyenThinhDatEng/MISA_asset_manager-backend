@@ -7,14 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.DL
 {
-    public interface IFixedAssetCategoryDL
+    public interface IFixedAssetCategoryDL : IBaseDL<FixedAssetCategory>
     {
-        /// <summary>
-        /// Lấy thông tin tất cả loại tài sản
-        /// </summary>
-        /// <returns>Danh sách loại tài sản</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public IEnumerable<dynamic> GetAllFixedAssetCategory();
-
     }
 }

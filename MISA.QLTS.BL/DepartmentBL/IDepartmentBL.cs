@@ -7,14 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.BL
 {
-    public interface IDepartmentBL
+    public interface IDepartmentBL : IBaseBL<Department>
     {
-        /// <summary>
-        /// Lấy thông tin tất cả bộ phận sử dụng
-        /// </summary>
-        /// <returns>Danh sách bộ phận sử dụng</returns>
-        /// Create by: NVThinh (16/11/2022)
-        public IEnumerable<dynamic> GetAllDepartment();
-
     }
 }

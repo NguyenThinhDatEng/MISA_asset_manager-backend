@@ -18,7 +18,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
-// Dependency 
+// Dependency injection
+builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));
+builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
+
 builder.Services.AddScoped<IFixedAssetDL, FixedAssetDL>();
 builder.Services.AddScoped<IFixedAssetBL, FixedAssetBL>();
 
@@ -27,6 +30,7 @@ builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
 
 builder.Services.AddScoped<IFixedAssetCategoryDL, FixedAssetCategoryDL>();
 builder.Services.AddScoped<IFixedAssetCategoryBL, FixedAssetCategoryBL>();
+
 
 // Lấy connectionString từ file appsetting
 DatabaseContext.ConnectionString = builder.Configuration.GetConnectionString("MySql");
