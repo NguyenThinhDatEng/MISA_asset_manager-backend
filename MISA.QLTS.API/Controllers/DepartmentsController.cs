@@ -11,7 +11,7 @@ namespace MISA.QLTS.COMMON.Controllers
 
         #region Constructor
 
-        public DepartmentsController(BaseBL<Department> departmentBL) : base(departmentBL) { }
+        public DepartmentsController(IDepartmentBL departmentBL) : base(departmentBL) { }
 
         #endregion
     }

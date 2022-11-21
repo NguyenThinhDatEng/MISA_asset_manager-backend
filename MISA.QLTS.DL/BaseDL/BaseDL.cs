@@ -63,6 +63,39 @@ namespace MISA.QLTS.DL
             }
         }
 
+        /// <summary>
+        /// Kiểm tra trùng mã
+        /// </summary>
+        /// <param name="recordCode">Mã bản ghi</param>
+        /// <param name="recordID">ID bản ghi</param>
+        /// <returns>Boolean</returns>
+        /// Created by: NVThinh (21/11/2022)
+        public bool CheckDuplicateCode(string recordCode, Guid recordID)
+        {
+            // Chuẩn bị câu lệnh MySQL
+            string procedureName = String.Format(Procedure.GET_BY_CODE, typeof(T).Name);
+
+            // Chuẩn bị tham số
+            var parameters = new DynamicParameters();
+            parameters.Add($"v_{typeof(T).Name}Code", recordCode);
+
+            // Thực hiện gọi vào DB
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                var res = mySqlConnection.QueryFirstOrDefault<T>(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                // Xử lí kết quả trả về
+                if (res == null)
+                {
+                    return false;
+                }
+                else if ((Guid)typeof(T).GetProperty("fixed_asset_id").GetValue(res) == recordID)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         #endregion
     }
 }

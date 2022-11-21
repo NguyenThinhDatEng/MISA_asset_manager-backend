@@ -16,34 +16,36 @@ namespace MISA.QLTS.DL
         /// created by: NVThinh 16/11/2022
         public string GetMaxFixedAssetCode()
         {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
 
             // Chuẩn bị câu lệnh SQL
             string storedProcedureName = "Proc_GetMaxFixedAssetCode";
 
-            //Thực hiện gọi vào DB
-            var maxCode = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, commandType: System.Data.CommandType.StoredProcedure);
-
-            //Xử lý kết quả trả về
-            // Lấy chiều dài phần số của mã tài sản
-            int length = maxCode.Length - 2;
-            // Lấy phần số của mã tài sản
-            int newID = Int32.Parse(maxCode.Substring(2)) + 1;
-            // Lấy chiều dài phần số của mã mới
-            int newLength = newID.ToString().Length;
-            // Chuyển đổi phần số sang chuỗi
-            string newCode = newID.ToString();
-            // Thêm kí tự '0' đằng trước phần số mới nếu chiều dài chuỗi mới nhỏ hơn chuỗi cũ
-            int numberOfZero = length - newLength;
-            for (int i = 0; i < numberOfZero; i++)
+            //Khởi tạo kết nối DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
-                newCode = '0' + newCode;
-            }
-            // Thêm tiền tố vào mã mới
-            newCode = newCode.Insert(0, "TS");
+                //Thực hiện gọi vào DB
+                var maxCode = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, commandType: System.Data.CommandType.StoredProcedure);
 
-            return newCode;
+                //Xử lý kết quả trả về
+                // Lấy chiều dài phần số của mã tài sản
+                int length = maxCode.Length - 2;
+                // Lấy phần số của mã tài sản
+                int newID = Int32.Parse(maxCode.Substring(2)) + 1;
+                // Lấy chiều dài phần số của mã mới
+                int newLength = newID.ToString().Length;
+                // Chuyển đổi phần số sang chuỗi
+                string newCode = newID.ToString();
+                // Thêm kí tự '0' đằng trước phần số mới nếu chiều dài chuỗi mới nhỏ hơn chuỗi cũ
+                int numberOfZero = length - newLength;
+                for (int i = 0; i < numberOfZero; i++)
+                {
+                    newCode = '0' + newCode;
+                }
+                // Thêm tiền tố vào mã mới
+                newCode = newCode.Insert(0, "TS");
+
+                return newCode;
+            }
         }
 
         #endregion
@@ -58,9 +60,6 @@ namespace MISA.QLTS.DL
         /// Created by: NVThinh (11/11/2022)
         public int InsertFixedAsset(FixedAsset fixedAsset)
         {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
-
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_CreateAsset";
 
@@ -89,10 +88,18 @@ namespace MISA.QLTS.DL
             parameters.Add("@modified_by", "Nguyen Van Thinh");
             parameters.Add("@modified_date", DateTime.Now);
 
-            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            // Kiểm tra mã trùng
+            if (CheckDuplicateCode(fixedAsset.fixed_asset_code, newID) == true)
+                return -1;
 
-            return numberOfRowsAffected;
+            //Khởi tạo kết nối DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+                var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return numberOfRowsAffected;
+            }
         }
 
         /// <summary>
@@ -155,8 +162,7 @@ namespace MISA.QLTS.DL
         /// Created by: NVThinh (11/11/2022)
         public int UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
+
 
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_UpdateAsset";
@@ -184,10 +190,19 @@ namespace MISA.QLTS.DL
             parameters.Add("@modified_by", null);
             parameters.Add("@modified_date", DateTime.Now);
 
-            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            // Kiểm tra mã trùng
+            if (CheckDuplicateCode(fixedAsset.fixed_asset_code, fixedAssetID) == true)
+                return -1;
 
-            return numberOfRowsAffected;
+            //Khởi tạo kết nối DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+                var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                return numberOfRowsAffected;
+            }
+
         }
 
         #endregion
@@ -201,9 +216,6 @@ namespace MISA.QLTS.DL
         /// <returns>ID tài sản được xóa</return
         public int DeleteFixedAsset(Guid fixedAssetID)
         {
-            //Khởi tạo kết nối DB MySQL
-            var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
-
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_DeleteAsset";
 
@@ -211,10 +223,14 @@ namespace MISA.QLTS.DL
             var parameters = new DynamicParameters();
             parameters.Add("@fixedAssetID", fixedAssetID);
 
-            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            //Khởi tạo kết nối DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+                var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
-            return numberOfRowsAffected;
+                return numberOfRowsAffected;
+            }
         }
 
         #endregion

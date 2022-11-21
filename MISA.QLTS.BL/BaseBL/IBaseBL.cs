@@ -22,5 +22,14 @@ namespace MISA.QLTS.BL
         /// <returns>Thông tin bản ghi theo ID</returns>
         /// Create by: NVThinh (16/11/2022)
         public T GetByID(Guid recordID);
+
+        /// <summary>
+        /// Kiểm tra trùng mã
+        /// </summary>
+        /// <param name="recordCode">Mã bản ghi</param>
+        /// <param name="recordID">ID bản ghi</param>
+        /// <returns>Boolean</returns>
+        /// Created by: NVThinh (21/11/2022)
+        public bool CheckDuplicateCode(string recordCode, Guid recordID);
     }
 }

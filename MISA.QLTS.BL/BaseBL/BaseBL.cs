@@ -1,4 +1,7 @@
-﻿using MISA.QLTS.DL;
+﻿using Dapper;
+using MISA.QLTS.Common.Constants;
+using MISA.QLTS.DL;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +47,18 @@ namespace MISA.QLTS.BL
         public T GetByID(Guid recordID)
         {
             return _baseDL.GetByID(recordID);
+        }
+
+        /// <summary>
+        /// Kiểm tra trùng mã
+        /// </summary>
+        /// <param name="recordCode">Mã bản ghi</param>
+        /// <param name="recordID">ID bản ghi</param>
+        /// <returns>Boolean</returns>
+        /// Created by: NVThinh (21/11/2022)
+        public bool CheckDuplicateCode(string recordCode, Guid recordID)
+        {
+           return _baseDL.CheckDuplicateCode(recordCode, recordID);
         }
 
         #endregion

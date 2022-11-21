@@ -24,6 +24,11 @@ namespace MISA.QLTS.Common.Enums
         /// <summary>
         /// Lỗi request
         /// </summary>
-        BadRequest = 3
+        BadRequest = 3,
+
+        /// <summary>
+        /// Lỗi trùng mã
+        /// </summary>
+        DuplicateKey = 4,
     }
 }

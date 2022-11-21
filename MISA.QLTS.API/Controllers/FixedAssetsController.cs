@@ -7,6 +7,8 @@ using MISA.QLTS.Common.Entitites.DTO;
 using MySqlConnector;
 using MISA.QLTS.DL;
 using MISA.QLTS.API.Controllers;
+using MISA.QLTS.Common;
+using System.Reflection;
 
 namespace MISA.QLTS.COMMON.Controllers
 {
@@ -40,8 +42,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// <param name="fixedAssetCategoryID">ID mã bộ phận sử dụng</param>
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
-        /// <returns>Danh sách tài sản cố định</returns>
-        /// <returns>Số bản ghi phù hợp</returns>
+        /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
         [HttpGet("filter")]
         public IActionResult GetFixedAssetByFilterAndPaging(
             [FromQuery] string? keyword,
@@ -70,13 +71,13 @@ namespace MISA.QLTS.COMMON.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
-                    ErrorCode = 1,
-                    DevMsg = "Catched an exception",
-                    UserMsg = "Vui lòng liên hệ MISA",
-                    MoreInfo = "https://openapi.misa.com.vn/ErrorCode/e001",
+                    ErrorCode = QLTSErrorCode.Exception,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = ex.Message,
+                    TraceID = HttpContext.TraceIdentifier
                 });
             }
         }
@@ -96,13 +97,14 @@ namespace MISA.QLTS.COMMON.Controllers
                 // Trả về cho Client
                 return StatusCode(StatusCodes.Status201Created, newCode);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception",
-                    UserMsg = "Vui lòng liên hệ MISA",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = ex.Message,
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }
@@ -133,32 +135,33 @@ namespace MISA.QLTS.COMMON.Controllers
                         NumberOfRowsAffected = numberOfRowsAffected,
                     });
                 else
-                    // Thất bại
-                    return StatusCode(StatusCodes.Status400BadRequest, new
-                    {
-                        ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = "Bad request",
-                        UserMsg = "",
-                        TraceID = HttpContext.TraceIdentifier,
-                    });
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
                 {
-                    ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "catched an MySQLException",
-                    moreinfo = ex.Message,
-                    TraceID = HttpContext.TraceIdentifier,
-                });
+                    if (numberOfRowsAffected == -1)
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = QLTSErrorCode.DuplicateKey,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_Duplicate_Key,
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = QLTSErrorCode.BadRequest,
+                            DevMsg = Resources.DevMsg_Bad_Request,
+                        });
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "catched an exception",
-                    UserMsg = "Thêm mới nhân viên thất bại",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Fail,
                     MoreInfo = ex.Message,
                     TraceID = HttpContext.TraceIdentifier,
                 });
@@ -186,21 +189,22 @@ namespace MISA.QLTS.COMMON.Controllers
                         FixedAssetIDList = fixedAssetIDs,
                     });
                 else
-                    return StatusCode(StatusCodes.Status400BadRequest, new
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
                         ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = "Bad request",
-                        UserMsg = "Có ID không phù hợp trong danh sách ID",
+                        DevMsg = Resources.DevMsg_Bad_Request,
+                        UserMsg = Resources.UserMsg_Bad_Request,
                     });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception",
-                    UserMsg = "Vui lòng liên hệ MISA",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
                     MoreInfo = ex.Message,
+                    TraceID = HttpContext.TraceIdentifier
                 });
             }
         }
@@ -232,20 +236,33 @@ namespace MISA.QLTS.COMMON.Controllers
                         FixedAssetID = fixedAssetID,
                     });
                 else
-                    return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    if (numberOfRowsAffected == -1)
                     {
-                        ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = "Bad request",
-                        UserMsg = "",
-                    });
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = QLTSErrorCode.DuplicateKey,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_Duplicate_Key
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = QLTSErrorCode.BadRequest,
+                            DevMsg = Resources.DevMsg_Exception,
+                        });
+                    }
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception",
-                    UserMsg = "Cập nhật thông tin thất bại",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Fail,
                     MoreInfo = ex.Message,
                     TraceID = HttpContext.TraceIdentifier,
                 });
@@ -278,22 +295,22 @@ namespace MISA.QLTS.COMMON.Controllers
                         FixedAssetID = fixedAssetID,
                     });
                 else
-                    return StatusCode(StatusCodes.Status400BadRequest, new
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
                         ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = "Bad request",
-                        UserMsg = "",
-                        TraceID = HttpContext.TraceIdentifier,
+                        DevMsg = Resources.DevMsg_Bad_Request,
+                        UserMsg = Resources.UserMsg_Fail,
                     });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception",
-                    UserMsg = "Vui lòng liên hệ MISA",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
                     MoreInfo = ex.Message,
+                    TraceID = HttpContext.TraceIdentifier
                 });
             }
         }

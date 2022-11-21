@@ -17,5 +17,10 @@ namespace MISA.QLTS.Common.Constants
         /// Format tên procedure lấy bản ghi theo ID
         /// </summary>
         public static string GET_BY_ID = "Proc_Get{0}ByID";
+
+        /// <summary>
+        /// Format tên procedure lấy bản ghi theo mã
+        /// </summary>
+        public static string GET_BY_CODE = "Proc_Get{0}ByCode";
     }
 }

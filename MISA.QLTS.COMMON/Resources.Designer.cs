@@ -22,7 +22,7 @@ namespace MISA.QLTS.Common {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MISA.QLTS.Common {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.QLTS.Common.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace MISA.QLTS.Common {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace MISA.QLTS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad Request.
+        /// </summary>
+        public static string DevMsg_Bad_Request {
+            get {
+                return ResourceManager.GetString("DevMsg_Bad_Request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catched an exception.
         /// </summary>
-        internal static string DevMsg_Exception {
+        public static string DevMsg_Exception {
             get {
                 return ResourceManager.GetString("DevMsg_Exception", resourceCulture);
             }
@@ -72,27 +81,54 @@ namespace MISA.QLTS.Common {
         /// <summary>
         ///   Looks up a localized string similar to Not Found.
         /// </summary>
-        internal static string DevMsg_NotFound {
+        public static string DevMsg_Not_Found {
             get {
-                return ResourceManager.GetString("DevMsg_NotFound", resourceCulture);
+                return ResourceManager.GetString("DevMsg_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yêu cầu không hợp lệ.
+        /// </summary>
+        public static string UserMsg_Bad_Request {
+            get {
+                return ResourceManager.GetString("UserMsg_Bad_Request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã tài sản đã tồn tại.
+        /// </summary>
+        public static string UserMsg_Duplicate_Key {
+            get {
+                return ResourceManager.GetString("UserMsg_Duplicate_Key", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Vui lòng liên hệ MISA.
         /// </summary>
-        internal static string UserMsg_Exception {
+        public static string UserMsg_Exception {
             get {
                 return ResourceManager.GetString("UserMsg_Exception", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yêu cầu thất bại.
+        /// </summary>
+        public static string UserMsg_Fail {
+            get {
+                return ResourceManager.GetString("UserMsg_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tìm thấy dữ liệu trả về.
         /// </summary>
-        internal static string UserMsg_NotFound {
+        public static string UserMsg_Not_Found {
             get {
-                return ResourceManager.GetString("UserMsg_NotFound", resourceCulture);
+                return ResourceManager.GetString("UserMsg_Not_Found", resourceCulture);
             }
         }
     }

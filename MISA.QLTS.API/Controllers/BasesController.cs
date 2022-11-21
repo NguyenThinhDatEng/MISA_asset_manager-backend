@@ -7,6 +7,7 @@ using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Enums;
 using MISA.QLTS.DL;
 using MySqlConnector;
+using MISA.QLTS.Common;
 
 namespace MISA.QLTS.API.Controllers
 {
@@ -29,7 +30,7 @@ namespace MISA.QLTS.API.Controllers
 
         #endregion
 
-        #region GET
+        #region Method
 
         /// <summary>
         /// API Lấy tất cả bản ghi
@@ -47,20 +48,20 @@ namespace MISA.QLTS.API.Controllers
                 if (fixedAssetList != null)
                     return StatusCode(StatusCodes.Status200OK, fixedAssetList);
                 // Thất bại
-                return StatusCode(StatusCodes.Status404NotFound, new
+                return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = "Not Found",
-                    UserMsg = "Không tìm thấy dữ liệu"
+                    DevMsg = Resources.DevMsg_Not_Found,
+                    UserMsg = Resources.UserMsg_Not_Found
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception!",
-                    UserMsg = "Vui lòng liên hệ MISA",
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
                     MoreInfo = ex.Message,
                     TraceID = HttpContext.TraceIdentifier,
                 });
@@ -86,21 +87,21 @@ namespace MISA.QLTS.API.Controllers
                     // Thành công
                     return StatusCode(StatusCodes.Status200OK, record);
                 // Thất bại
-                return StatusCode(StatusCodes.Status404NotFound, new
+                return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = "Not Found",
-                    UserMsg = "Không tìm thấy bản ghi"
+                    DevMsg = Resources.DevMsg_Not_Found,
+                    UserMsg = Resources.UserMsg_Not_Found
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = "Catched an exception!",
-                    UserMsg = "Vui lòng liên hệ MISA",
-                    moreInfo = ex.Message,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = ex.Message,
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }

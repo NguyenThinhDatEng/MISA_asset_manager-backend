@@ -117,18 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DevMsg_Bad_Request" xml:space="preserve">
+    <value>Bad Request</value>
+  </data>
   <data name="DevMsg_Exception" xml:space="preserve">
     <value>Catched an exception</value>
     <comment>Có ngoại lệ xảy ra</comment>
   </data>
-  <data name="DevMsg_NotFound" xml:space="preserve">
+  <data name="DevMsg_Not_Found" xml:space="preserve">
     <value>Not Found</value>
     <comment>Không tìm thấy dữ liệu trả về</comment>
+  </data>
+  <data name="UserMsg_Bad_Request" xml:space="preserve">
+    <value>Yêu cầu không hợp lệ</value>
+  </data>
+  <data name="UserMsg_Duplicate_Key" xml:space="preserve">
+    <value>Mã tài sản đã tồn tại</value>
+    <comment>Kiểm tra mã trùng</comment>
   </data>
   <data name="UserMsg_Exception" xml:space="preserve">
     <value>Vui lòng liên hệ MISA</value>
   </data>
-  <data name="UserMsg_NotFound" xml:space="preserve">
+  <data name="UserMsg_Fail" xml:space="preserve">
+    <value>Yêu cầu thất bại</value>
+  </data>
+  <data name="UserMsg_Not_Found" xml:space="preserve">
     <value>Không tìm thấy dữ liệu trả về</value>
     <comment>Không tìm thấy dữ liệu trả về</comment>
   </data>
