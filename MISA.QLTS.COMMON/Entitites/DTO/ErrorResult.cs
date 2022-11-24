@@ -27,7 +27,7 @@ namespace MISA.QLTS.Common.Entitites.DTO
         /// <summary>
         /// Thông tin thêm
         /// </summary>
-        public string MoreInfo { get; set; }
+        public List<string> MoreInfo { get; set; }
 
         /// <summary>
         /// ID dùng để truy vết lỗi khi log lại

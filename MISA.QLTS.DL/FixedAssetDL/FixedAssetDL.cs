@@ -48,6 +48,93 @@ namespace MISA.QLTS.DL
             }
         }
 
+        /// <summary>
+        /// API lấy tài sản theo bộ lọc và phân trang
+        /// </summary>
+        /// <param name="keyword">Từ khóa tìm kiếm</param>
+        /// <param name="departmentID">Mảng ID bộ phận sử dụng</param>
+        /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
+        /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
+        /// <param name="limit">số bản ghi lấy ra</param>
+        /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        public PagingResult GetFixedAssetByFilterAndPaging(
+            string? keyword,
+            Guid? departmentID,
+            Guid? fixedAssetCategoryID,
+            int offset = 0,
+            int limit = 20)
+        {
+            // Chuẩn bị tên Stored procedure
+            string procedureName = "Proc_GetFixedAssetPaging";
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parameters = new DynamicParameters();
+            parameters.Add("@v_Offset", offset);
+            parameters.Add("@v_Limit", limit);
+            parameters.Add("@v_Sort", "modified_date DESC");
+
+            // Chuẩn bị cho điều kiện where
+            string whereClause = "";
+            var orConditions = new List<string>();
+            var andConditions = new List<string>();
+
+            // Tìm kiếm
+            if (keyword != null && keyword != "")
+            {
+                orConditions.Add($"fixed_asset_code LIKE '%{keyword}%'");
+                orConditions.Add($"fixed_asset_name LIKE '%{keyword}%'");
+            }
+            if (orConditions.Count > 0)
+            {
+                whereClause = $"({string.Join(" OR ", orConditions)})";
+            }
+
+            // Lọc theo loại tài sản
+            if (fixedAssetCategoryID != Guid.Empty && fixedAssetCategoryID != null)
+            {
+                andConditions.Add($"fixed_asset_category_id like '%{fixedAssetCategoryID}%'");
+            }
+
+            // Lọc theo mã phòng ban
+            if (departmentID != Guid.Empty && departmentID != null)
+            {
+                andConditions.Add($"department_id LIKE '%{departmentID}%'");
+            }
+
+            if (andConditions.Count > 0)
+            {
+                if (keyword != null)
+                    whereClause += $" AND {string.Join(" AND ", andConditions)}";
+                else
+                    whereClause += $"{string.Join(" AND ", andConditions)}";
+            }
+
+            parameters.Add("@v_Where", whereClause);
+
+
+            // Khởi tạo kết nối tới DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+                var multipleResults = mySqlConnection.QueryMultiple(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                // Xử lý kết quả trả về từ DB
+                // Thành công
+                if (multipleResults != null)
+                {
+                    var employees = multipleResults.Read<FixedAsset>().ToList();
+                    var totalOfRecords = multipleResults.Read<int>().Single();
+                    return new PagingResult
+                    {
+                        Data = employees,
+                        totalOfRecords = totalOfRecords
+                    };
+                }
+            }
+            // Thất bại
+            return null;
+        }
+
         #endregion
 
         #region POST
@@ -58,7 +145,7 @@ namespace MISA.QLTS.DL
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
         /// Created by: NVThinh (11/11/2022)
-        public int InsertFixedAsset(FixedAsset fixedAsset)
+        public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset)
         {
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_CreateAsset";
@@ -88,17 +175,25 @@ namespace MISA.QLTS.DL
             parameters.Add("@modified_by", "Nguyen Van Thinh");
             parameters.Add("@modified_date", DateTime.Now);
 
-            // Kiểm tra mã trùng
-            if (CheckDuplicateCode(fixedAsset.fixed_asset_code, newID) == true)
-                return -1;
-
             //Khởi tạo kết nối DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
                 // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
                 var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
-                return numberOfRowsAffected;
+                if (numberOfRowsAffected > 0)
+
+                    return new ServiceResponse
+                    {
+                        Success = true
+                    };
+                else
+                {
+                    return new ServiceResponse
+                    {
+                        Success = false
+                    };
+                }
             }
         }
 
@@ -107,7 +202,7 @@ namespace MISA.QLTS.DL
         /// </summary>
         /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
-        public bool DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
+        public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
         {
             //Khởi tạo kết nối DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
@@ -138,13 +233,13 @@ namespace MISA.QLTS.DL
                     // Cam kết thực hiện thành công
                     transaction.Commit();
 
-                    return true;
+                    return new ServiceResponse { Success = true };
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
 
-                    return false;
+                    return new ServiceResponse { Success = false, Data = new List<string> { ex.Message } };
                 }
             }
         }
@@ -162,8 +257,6 @@ namespace MISA.QLTS.DL
         /// Created by: NVThinh (11/11/2022)
         public int UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
-
-
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_UpdateAsset";
 
@@ -190,10 +283,6 @@ namespace MISA.QLTS.DL
             parameters.Add("@modified_by", null);
             parameters.Add("@modified_date", DateTime.Now);
 
-            // Kiểm tra mã trùng
-            if (CheckDuplicateCode(fixedAsset.fixed_asset_code, fixedAssetID) == true)
-                return -1;
-
             //Khởi tạo kết nối DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
@@ -202,7 +291,6 @@ namespace MISA.QLTS.DL
 
                 return numberOfRowsAffected;
             }
-
         }
 
         #endregion

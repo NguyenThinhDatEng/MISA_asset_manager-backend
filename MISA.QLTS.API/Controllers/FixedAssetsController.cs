@@ -1,14 +1,10 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MISA.QLTS.BL;
 using MISA.QLTS.Common.Enums;
 using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Entitites.DTO;
-using MySqlConnector;
-using MISA.QLTS.DL;
 using MISA.QLTS.API.Controllers;
-using MISA.QLTS.Common;
-using System.Reflection;
+using MISA.QLTS.Common.Resources;
 
 namespace MISA.QLTS.COMMON.Controllers
 {
@@ -46,27 +42,25 @@ namespace MISA.QLTS.COMMON.Controllers
         [HttpGet("filter")]
         public IActionResult GetFixedAssetByFilterAndPaging(
             [FromQuery] string? keyword,
-            [FromQuery] Guid? departmentID,
-            [FromQuery] Guid? fixedAssetCategoryID,
+            [FromQuery] Guid departmentID,
+            [FromQuery] Guid fixedAssetCategoryID,
             [FromQuery] int offset = 0,
             [FromQuery] int limit = 20)
         {
             try
             {
-                //Khởi tạo kết nối DB MySQL
-                var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString);
+                // Gọi đến Business layer
+                var pagingResult = _fixedAssetBL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit);
 
-                // Chuẩn bị câu lệnh SQL
-                string procedureName = "Proc_GetAssetPaging";
-
-                // Chuẩn bị tham số đầu vào cho stored procedure
-                var parameters = new DynamicParameters();
-
-
-                return StatusCode(StatusCodes.Status200OK, new PagingResult
+                // Nếu thành công
+                if (pagingResult != null)
+                    return StatusCode(StatusCodes.Status200OK, pagingResult);
+                // Thất bại
+                return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
                 {
-                    Data = new List<FixedAsset>(),
-                    totalOfRecords = 20
+                    ErrorCode = QLTSErrorCode.NotFound,
+                    DevMsg = Errors.DevMsg_Not_Found,
+                    UserMsg = Errors.UserMsg_Not_Found,
                 });
             }
             catch (Exception ex)
@@ -74,9 +68,9 @@ namespace MISA.QLTS.COMMON.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier
                 });
             }
@@ -102,9 +96,9 @@ namespace MISA.QLTS.COMMON.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }
@@ -113,6 +107,7 @@ namespace MISA.QLTS.COMMON.Controllers
         #endregion
 
         #region POST
+
         /// <summary>
         /// API Tạo mới tài sản cố định
         /// </summary>
@@ -125,44 +120,31 @@ namespace MISA.QLTS.COMMON.Controllers
             try
             {
                 // Gọi đến Business Layer
-                var numberOfRowsAffected = _fixedAssetBL.InsertFixedAsset(fixedAsset);
+                var serviceResponse = _fixedAssetBL.InsertFixedAsset(fixedAsset);
 
-                // Xử lý kết quả trả về từ DB (GridReader)
-                if (numberOfRowsAffected > 0)
-                    // Thành công
-                    return StatusCode(StatusCodes.Status201Created, new
-                    {
-                        NumberOfRowsAffected = numberOfRowsAffected,
-                    });
-                else
+                // Validate dữ liệu đầu vào
+                if (!serviceResponse.Success)
                 {
-                    if (numberOfRowsAffected == -1)
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
-                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
-                        {
-                            ErrorCode = QLTSErrorCode.DuplicateKey,
-                            DevMsg = Resources.DevMsg_Exception,
-                            UserMsg = Resources.UserMsg_Duplicate_Key,
-                        });
-                    }
-                    else
-                    {
-                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
-                        {
-                            ErrorCode = QLTSErrorCode.BadRequest,
-                            DevMsg = Resources.DevMsg_Bad_Request,
-                        });
-                    }
+                        ErrorCode = QLTSErrorCode.BadRequest,
+                        DevMsg = Errors.DevMsg_Bad_Request,
+                        UserMsg = Errors.UserMsg_Bad_Request,
+                        MoreInfo = serviceResponse.Data
+                    });
                 }
+
+                // Thành công
+                return StatusCode(StatusCodes.Status201Created, fixedAsset);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Fail,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Fail,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }
@@ -180,10 +162,10 @@ namespace MISA.QLTS.COMMON.Controllers
             try
             {
                 // Gọi đến Business Layer
-                var isSuccessful = _fixedAssetBL.DeleteMultipleFixedAsset(fixedAssetIDs);
+                var serviceResponse = _fixedAssetBL.DeleteMultipleFixedAsset(fixedAssetIDs);
 
                 // Xử lý kết quả trả về từ DB (GridReader)
-                if (isSuccessful)
+                if (serviceResponse.Success)
                     return StatusCode(StatusCodes.Status200OK, new
                     {
                         FixedAssetIDList = fixedAssetIDs,
@@ -192,8 +174,9 @@ namespace MISA.QLTS.COMMON.Controllers
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
                         ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = Resources.DevMsg_Bad_Request,
-                        UserMsg = Resources.UserMsg_Bad_Request,
+                        DevMsg = Errors.DevMsg_Bad_Request,
+                        UserMsg = Errors.UserMsg_Bad_Request,
+                        MoreInfo = serviceResponse.Data
                     });
             }
             catch (Exception ex)
@@ -201,9 +184,9 @@ namespace MISA.QLTS.COMMON.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier
                 });
             }
@@ -226,6 +209,19 @@ namespace MISA.QLTS.COMMON.Controllers
         {
             try
             {
+                // Validate dữ liệu đầu vào
+                var validateResult = _fixedAssetBL.ValidateRequestData(fixedAsset);
+                if (!validateResult.Success)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                    {
+                        ErrorCode = QLTSErrorCode.BadRequest,
+                        DevMsg = Errors.DevMsg_Bad_Request,
+                        UserMsg = Errors.UserMsg_Bad_Request,
+                        MoreInfo = validateResult.Data
+                    });
+                }
+
                 // Gọi đến BL
                 var numberOfRowsAffected = _fixedAssetBL.UpdateFixedAsset(fixedAssetID, fixedAsset);
 
@@ -242,8 +238,8 @@ namespace MISA.QLTS.COMMON.Controllers
                         return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                         {
                             ErrorCode = QLTSErrorCode.DuplicateKey,
-                            DevMsg = Resources.DevMsg_Exception,
-                            UserMsg = Resources.UserMsg_Duplicate_Key
+                            DevMsg = Errors.DevMsg_Exception,
+                            UserMsg = Errors.UserMsg_Duplicate_Key
                         });
                     }
                     else
@@ -251,7 +247,7 @@ namespace MISA.QLTS.COMMON.Controllers
                         return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                         {
                             ErrorCode = QLTSErrorCode.BadRequest,
-                            DevMsg = Resources.DevMsg_Exception,
+                            DevMsg = Errors.DevMsg_Exception,
                         });
                     }
                 }
@@ -261,9 +257,9 @@ namespace MISA.QLTS.COMMON.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Fail,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Fail,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }
@@ -298,8 +294,8 @@ namespace MISA.QLTS.COMMON.Controllers
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
                         ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = Resources.DevMsg_Bad_Request,
-                        UserMsg = Resources.UserMsg_Fail,
+                        DevMsg = Errors.DevMsg_Bad_Request,
+                        UserMsg = Errors.UserMsg_Fail,
                     });
             }
             catch (Exception ex)
@@ -307,9 +303,9 @@ namespace MISA.QLTS.COMMON.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier
                 });
             }

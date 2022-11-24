@@ -131,6 +131,10 @@
   <data name="UserMsg_Bad_Request" xml:space="preserve">
     <value>Yêu cầu không hợp lệ</value>
   </data>
+  <data name="UserMsg_Department_Code" xml:space="preserve">
+    <value>Mã bộ phận sử dụng phải có tiền tố là D, số tăng dần bắt đầu từ 001</value>
+    <comment>Lỗi nhập sai định dạng mã bộ phận sử dụng</comment>
+  </data>
   <data name="UserMsg_Duplicate_Key" xml:space="preserve">
     <value>Mã tài sản đã tồn tại</value>
     <comment>Kiểm tra mã trùng</comment>
@@ -141,8 +145,24 @@
   <data name="UserMsg_Fail" xml:space="preserve">
     <value>Yêu cầu thất bại</value>
   </data>
+  <data name="UserMsg_Fixed_Asset_Category_Code" xml:space="preserve">
+    <value>Mã loại tài sản phải có tiền tố là AC, số tăng dần bắt đầu từ 001</value>
+    <comment>Lỗi nhập sai định dạng mã loại tài sản</comment>
+  </data>
+  <data name="UserMsg_Fixed_Asset_Code" xml:space="preserve">
+    <value>Mã nhân viên phải có tiền tố là TS, số tăng dần bắt đầu từ 00001</value>
+    <comment>Lỗi nhập sai định dạng mã tài sản</comment>
+  </data>
+  <data name="UserMsg_Multiple_Attributes_Same_Type" xml:space="preserve">
+    <value>Có nhiều attributes được custom cùng kiểu dữ liệu áp dụng vào một property của entity</value>
+    <comment>Ngoại lệ AmbiguousMatchException</comment>
+  </data>
   <data name="UserMsg_Not_Found" xml:space="preserve">
     <value>Không tìm thấy dữ liệu trả về</value>
     <comment>Không tìm thấy dữ liệu trả về</comment>
+  </data>
+  <data name="UserMsg_Wrong_Data_Type" xml:space="preserve">
+    <value>Sai kiểu dữ liệu truyền vào</value>
+    <comment>Thường xảy ra khi truyền dữ liệu text vào kiểu số</comment>
   </data>
 </root>

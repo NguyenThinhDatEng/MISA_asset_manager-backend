@@ -88,9 +88,14 @@ namespace MISA.QLTS.DL
                 {
                     return false;
                 }
-                else if ((Guid)typeof(T).GetProperty("fixed_asset_id").GetValue(res) == recordID)
+                else
                 {
-                    return false;
+                    // so sánh xem ID truyền vào có trùng với ID lấy lên từ Database không
+                    var property = typeof(T).GetProperty("fixed_asset_id");
+                    if ((Guid)property.GetValue(res) == recordID)
+                    {
+                        return false;
+                    }
                 }
                 return true;
             }

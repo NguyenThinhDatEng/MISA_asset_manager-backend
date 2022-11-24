@@ -18,12 +18,28 @@ namespace MISA.QLTS.DL
         public string GetMaxFixedAssetCode();
 
         /// <summary>
+        /// API lấy tài sản theo bộ lọc và phân trang
+        /// </summary>
+        /// <param name="keyword">Từ khóa tìm kiếm</param>
+        /// <param name="departmentID">Mảng ID bộ phận sử dụng</param>
+        /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
+        /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
+        /// <param name="limit">số bản ghi lấy ra</param>
+        /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        public PagingResult GetFixedAssetByFilterAndPaging(
+            string? keyword,
+            Guid? departmentID,
+            Guid? fixedAssetCategoryID,
+            int offset = 0,
+            int limit = 20);
+
+        /// <summary>
         /// API Tạo mới tài sản cố định
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
         /// Created by: NVThinh (11/11/2022)
-        public int InsertFixedAsset(FixedAsset fixedAsset);
+        public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset);
 
         /// <summary>
         /// API cập nhật thông tin tài sản
@@ -48,6 +64,6 @@ namespace MISA.QLTS.DL
         /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
         /// Created by: NVThinh (11/11/2022)
-        public bool DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs);
+        public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs);
     }
 }

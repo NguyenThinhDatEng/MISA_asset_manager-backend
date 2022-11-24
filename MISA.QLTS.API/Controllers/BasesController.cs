@@ -1,13 +1,8 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MISA.QLTS.BL;
 using MISA.QLTS.Common.Entitites.DTO;
-using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Enums;
-using MISA.QLTS.DL;
-using MySqlConnector;
-using MISA.QLTS.Common;
+using MISA.QLTS.Common.Resources;
 
 namespace MISA.QLTS.API.Controllers
 {
@@ -51,8 +46,8 @@ namespace MISA.QLTS.API.Controllers
                 return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = Resources.DevMsg_Not_Found,
-                    UserMsg = Resources.UserMsg_Not_Found
+                    DevMsg = Errors.DevMsg_Not_Found,
+                    UserMsg = Errors.UserMsg_Not_Found,
                 });
             }
             catch (Exception ex)
@@ -60,9 +55,9 @@ namespace MISA.QLTS.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }
@@ -90,8 +85,8 @@ namespace MISA.QLTS.API.Controllers
                 return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.NotFound,
-                    DevMsg = Resources.DevMsg_Not_Found,
-                    UserMsg = Resources.UserMsg_Not_Found
+                    DevMsg = Errors.DevMsg_Not_Found,
+                    UserMsg = Errors.UserMsg_Not_Found
                 });
             }
             catch (Exception ex)
@@ -99,9 +94,9 @@ namespace MISA.QLTS.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = ex.Message,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
                 });
             }

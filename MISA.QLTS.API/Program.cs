@@ -1,4 +1,5 @@
-﻿using MISA.QLTS.BL;
+﻿using Microsoft.AspNetCore.Mvc;
+using MISA.QLTS.BL;
 using MISA.QLTS.DL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,12 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
+// Bỏ qua validate của attribute trong C#
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 // Dependency injection
 builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MISA.QLTS.Common {
+namespace MISA.QLTS.Common.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace MISA.QLTS.Common {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    public class Errors {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Errors() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MISA.QLTS.Common {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.QLTS.Common.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.QLTS.Common.Resources.Errors", typeof(Errors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -97,6 +97,15 @@ namespace MISA.QLTS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã bộ phận sử dụng phải có tiền tố là D, số tăng dần bắt đầu từ 001.
+        /// </summary>
+        public static string UserMsg_Department_Code {
+            get {
+                return ResourceManager.GetString("UserMsg_Department_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã tài sản đã tồn tại.
         /// </summary>
         public static string UserMsg_Duplicate_Key {
@@ -124,11 +133,47 @@ namespace MISA.QLTS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã loại tài sản phải có tiền tố là AC, số tăng dần bắt đầu từ 001.
+        /// </summary>
+        public static string UserMsg_Fixed_Asset_Category_Code {
+            get {
+                return ResourceManager.GetString("UserMsg_Fixed_Asset_Category_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên phải có tiền tố là TS, số tăng dần bắt đầu từ 00001.
+        /// </summary>
+        public static string UserMsg_Fixed_Asset_Code {
+            get {
+                return ResourceManager.GetString("UserMsg_Fixed_Asset_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Có nhiều attributes được custom cùng kiểu dữ liệu áp dụng vào một property của entity.
+        /// </summary>
+        public static string UserMsg_Multiple_Attributes_Same_Type {
+            get {
+                return ResourceManager.GetString("UserMsg_Multiple_Attributes_Same_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không tìm thấy dữ liệu trả về.
         /// </summary>
         public static string UserMsg_Not_Found {
             get {
                 return ResourceManager.GetString("UserMsg_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sai kiểu dữ liệu truyền vào.
+        /// </summary>
+        public static string UserMsg_Wrong_Data_Type {
+            get {
+                return ResourceManager.GetString("UserMsg_Wrong_Data_Type", resourceCulture);
             }
         }
     }
