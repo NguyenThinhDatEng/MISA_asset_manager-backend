@@ -30,5 +30,10 @@ namespace MISA.QLTS.Common.Enums
         /// Lỗi trùng mã
         /// </summary>
         DuplicateKey = 4,
+
+        /// <summary>
+        /// Lỗi xác thực dữ liệu
+        /// </summary>
+        Validate = 5
     }
 }

@@ -48,7 +48,7 @@ namespace MISA.QLTS.BL
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
         /// Created by: NVThinh (11/11/2022)
-        public int UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset);
+        public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset);
 
         /// <summary>
         /// API Xóa 01 tài sản

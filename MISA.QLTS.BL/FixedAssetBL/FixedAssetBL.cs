@@ -95,8 +95,11 @@ namespace MISA.QLTS.BL
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
         /// Created by: NVThinh (11/11/2022)
-        public int UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
+        public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
+            var validateResult = ValidateRequestData(fixedAsset);
+            if (!validateResult.Success)
+                return validateResult;
             return _fixedAssetDL.UpdateFixedAsset(fixedAssetID, fixedAsset);
         }
 
@@ -127,11 +130,21 @@ namespace MISA.QLTS.BL
         {
             try
             {
+                var validateFailures = new List<string>(); // mảng các lỗi gặp phải
+
+                // Kiểm tra mã trùng
+                var recordCode = typeof(FixedAsset).GetProperty("fixed_asset_code").GetValue(fixedAsset).ToString();
+                var recordID = typeof(FixedAsset).GetProperty("fixed_asset_id").GetValue(fixedAsset);
+                recordID = recordID != null ? (Guid)recordID : Guid.Empty;
+                if (_fixedAssetDL.CheckDuplicateCode(recordCode, (Guid)recordID))
+                {
+                    validateFailures.Add(Errors.UserMsg_Duplicate_Key);
+                }
+
                 // Lấy danh sách các properties của đối tượng
                 var properties = typeof(FixedAsset).GetProperties(); // an array
 
                 // Duyệt qua từng property và kiểm tra C# attributes
-                var validateFailures = new List<string>(); // mảng các lỗi gặp phải
                 foreach (var property in properties)
                 {
                     // lấy giá trị của đối tượng theo từng property
@@ -162,12 +175,14 @@ namespace MISA.QLTS.BL
                         validateFailures.Add(formAttribute.ErrorMessage);
                     }
                 }
+
                 // Xử lý kết quả
                 if (validateFailures.Count > 0)
                 {
                     return new ServiceResponse
                     {
                         Success = false,
+                        ErrorCode = QLTSErrorCode.BadRequest,
                         Data = validateFailures,
                     };
                 }
@@ -178,6 +193,7 @@ namespace MISA.QLTS.BL
                 return new ServiceResponse
                 {
                     Success = false,
+                    ErrorCode = QLTSErrorCode.Exception,
                     Data = new List<string> { ex.Message, Errors.UserMsg_Multiple_Attributes_Same_Type }
                 };
             }
@@ -186,6 +202,7 @@ namespace MISA.QLTS.BL
                 return new ServiceResponse
                 {
                     Success = false,
+                    ErrorCode = QLTSErrorCode.Exception,
                     Data = new List<string> { ex.Message, Errors.UserMsg_Wrong_Data_Type }
                 };
             }

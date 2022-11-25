@@ -122,16 +122,27 @@ namespace MISA.QLTS.COMMON.Controllers
                 // Gọi đến Business Layer
                 var serviceResponse = _fixedAssetBL.InsertFixedAsset(fixedAsset);
 
-                // Validate dữ liệu đầu vào
+                // Có lỗi khi validate dữ liệu
                 if (!serviceResponse.Success)
                 {
+                    if (serviceResponse.ErrorCode == QLTSErrorCode.BadRequest)
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
-                        ErrorCode = QLTSErrorCode.BadRequest,
+                        ErrorCode = serviceResponse.ErrorCode,
                         DevMsg = Errors.DevMsg_Bad_Request,
                         UserMsg = Errors.UserMsg_Bad_Request,
                         MoreInfo = serviceResponse.Data
                     });
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                        {
+                            ErrorCode = serviceResponse.ErrorCode,
+                            DevMsg = Errors.DevMsg_Exception,
+                            UserMsg = Errors.UserMsg_Exception,
+                            MoreInfo = serviceResponse.Data
+                        });
+                    }
                 }
 
                 // Thành công
@@ -209,48 +220,34 @@ namespace MISA.QLTS.COMMON.Controllers
         {
             try
             {
-                // Validate dữ liệu đầu vào
-                var validateResult = _fixedAssetBL.ValidateRequestData(fixedAsset);
-                if (!validateResult.Success)
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
-                    {
-                        ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = Errors.DevMsg_Bad_Request,
-                        UserMsg = Errors.UserMsg_Bad_Request,
-                        MoreInfo = validateResult.Data
-                    });
-                }
+                // Gọi đến Business Layer
+                var serviceResponse = _fixedAssetBL.UpdateFixedAsset(fixedAssetID, fixedAsset);
 
-                // Gọi đến BL
-                var numberOfRowsAffected = _fixedAssetBL.UpdateFixedAsset(fixedAssetID, fixedAsset);
-
-                // Xử lý kết quả trả về từ DB (GridReader)
-                if (numberOfRowsAffected > 0)
-                    return StatusCode(StatusCodes.Status200OK, new
-                    {
-                        FixedAssetID = fixedAssetID,
-                    });
-                else
+                // Có lỗi khi validate dữ liệu
+                if (!serviceResponse.Success)
                 {
-                    if (numberOfRowsAffected == -1)
-                    {
+                    if (serviceResponse.ErrorCode == QLTSErrorCode.BadRequest)
                         return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                         {
-                            ErrorCode = QLTSErrorCode.DuplicateKey,
-                            DevMsg = Errors.DevMsg_Exception,
-                            UserMsg = Errors.UserMsg_Duplicate_Key
+                            ErrorCode = serviceResponse.ErrorCode,
+                            DevMsg = Errors.DevMsg_Bad_Request,
+                            UserMsg = Errors.UserMsg_Bad_Request,
+                            MoreInfo = serviceResponse.Data
                         });
-                    }
                     else
                     {
-                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                         {
-                            ErrorCode = QLTSErrorCode.BadRequest,
+                            ErrorCode = serviceResponse.ErrorCode,
                             DevMsg = Errors.DevMsg_Exception,
+                            UserMsg = Errors.UserMsg_Exception,
+                            MoreInfo = serviceResponse.Data
                         });
                     }
                 }
+
+                // Thành công
+                return StatusCode(StatusCodes.Status200OK, fixedAsset);
             }
             catch (Exception ex)
             {

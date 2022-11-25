@@ -7,6 +7,8 @@ namespace MISA.QLTS.DL
 {
     public class FixedAssetDL : BaseDL<FixedAsset>, IFixedAssetDL
     {
+        #region Method
+
         #region GET
 
         /// <summary>
@@ -255,7 +257,7 @@ namespace MISA.QLTS.DL
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
         /// Created by: NVThinh (11/11/2022)
-        public int UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
+        public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_UpdateAsset";
@@ -289,7 +291,19 @@ namespace MISA.QLTS.DL
                 // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
                 var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
-                return numberOfRowsAffected;
+                if (numberOfRowsAffected > 0)
+
+                    return new ServiceResponse
+                    {
+                        Success = true
+                    };
+                else
+                {
+                    return new ServiceResponse
+                    {
+                        Success = false
+                    };
+                }
             }
         }
 
@@ -320,6 +334,8 @@ namespace MISA.QLTS.DL
                 return numberOfRowsAffected;
             }
         }
+
+        #endregion 
 
         #endregion
     }
