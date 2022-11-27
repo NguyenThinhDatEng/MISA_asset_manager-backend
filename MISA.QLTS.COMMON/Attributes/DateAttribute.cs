@@ -35,6 +35,7 @@ namespace MISA.QLTS.Common.Attributes
         /// </summary>
         /// <param name="value">ngày truyền vào</param>
         /// <returns>true nếu ngày truyền vào nhỏ hơn hoặc bằng ngày hiện tại</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public override bool IsValid(object? value)
         {
             if (value != null && DateTime.Compare(Convert.ToDateTime(value), DateTime.Now) > 0)

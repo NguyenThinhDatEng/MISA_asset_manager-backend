@@ -119,18 +119,23 @@
   </resheader>
   <data name="cost" xml:space="preserve">
     <value>Nguyên giá</value>
+    <comment>Giá trị của tài sản cố định</comment>
   </data>
   <data name="department_code" xml:space="preserve">
     <value>Mã bộ phận sử dụng</value>
+    <comment>Mã bộ phận sử dụng tài sản cố định</comment>
   </data>
   <data name="department_id" xml:space="preserve">
     <value>ID bộ phận sử dụng</value>
+    <comment>ID bộ phận sử dụng tài sản cố định</comment>
   </data>
   <data name="department_name" xml:space="preserve">
     <value>Tên bộ phận sử dụng</value>
+    <comment>Tên bộ phận sử dụng tài sản cố định</comment>
   </data>
   <data name="depreciation_rate" xml:space="preserve">
     <value>Tỉ lệ hao mòn</value>
+    <comment>Tỉ lệ hao mòn của tài sản cố định = 1 / số năm sử dụng</comment>
   </data>
   <data name="fixed_asset_category_code" xml:space="preserve">
     <value>Mã loại tài sản</value>
@@ -170,6 +175,7 @@
   </data>
   <data name="quantity" xml:space="preserve">
     <value>Số lượng</value>
+    <comment>Số lượng tài sản cố dịnh</comment>
   </data>
   <data name="tracked_year" xml:space="preserve">
     <value>Năm theo dõi</value>

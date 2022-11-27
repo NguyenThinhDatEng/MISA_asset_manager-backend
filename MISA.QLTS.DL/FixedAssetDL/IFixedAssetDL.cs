@@ -14,7 +14,7 @@ namespace MISA.QLTS.DL
         /// API lấy mã tài sản cố định mới
         /// </summary>
         /// <returns>Mã tài sản cố định mới</returns>
-        /// created by: NVThinh 16/11/2022
+        /// Author: NVThinh 16/11/2022
         public string GetMaxFixedAssetCode();
 
         /// <summary>
@@ -26,6 +26,7 @@ namespace MISA.QLTS.DL
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public PagingResult GetFixedAssetByFilterAndPaging(
             string? keyword,
             Guid? departmentID,
@@ -38,7 +39,7 @@ namespace MISA.QLTS.DL
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset);
 
         /// <summary>
@@ -47,23 +48,23 @@ namespace MISA.QLTS.DL
         /// <param name="fixedAssetID">ID tài sản được cập nhật</param>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset);
 
         /// <summary>
         /// API Xóa 01 tài sản
         /// </summary>
         /// <param name="fixedAssetID">ID tài sản cần xóa</param>
-        /// <returns>ID tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// <returns>ID tài sản được xóa</return
+        /// <author>NVThinh 27/11/2022</author>
         public int DeleteFixedAsset(Guid fixedAssetID);
 
         /// <summary>
         /// Xóa nhiều bản ghi
         /// </summary>
-        /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
+        /// <param name="fixedAssetIDs">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// <author>NVThinh 27/11/2022</author>
         public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs);
     }
 }

@@ -68,7 +68,7 @@ namespace MISA.QLTS.API.Controllers
         /// </summary>
         /// <param name="recordID">ID bản ghi muốn lấy</param>
         /// <returns>Thông tin bản ghi theo ID</returns>
-        /// Create by: NVThinh (16/11/2022)
+        /// Author: NVThinh (16/11/2022)
         [HttpGet("{recordID}")]
         public IActionResult GetFixedAssetByID([FromRoute] Guid recordID)
         {

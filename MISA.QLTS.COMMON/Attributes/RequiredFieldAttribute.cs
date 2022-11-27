@@ -32,6 +32,12 @@ namespace MISA.QLTS.Common.Attributes
 
         #region Method
 
+        /// <summary>
+        /// Kiểm tra các giá trị yêu cầu nhập
+        /// </summary>
+        /// <param name="value">1 đối tượng chỉ chứa 1 thuộc tính</param>
+        /// <returns>true nếu giá trị không rỗng với kiểu số và khác 0 với kiểu số</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public override bool IsValid(object? value)
         {
             // Nếu dữ liệu là kiểu text

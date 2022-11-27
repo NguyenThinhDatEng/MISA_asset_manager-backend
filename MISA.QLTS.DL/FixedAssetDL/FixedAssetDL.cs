@@ -15,7 +15,7 @@ namespace MISA.QLTS.DL
         /// API lấy mã tài sản cố định mới
         /// </summary>
         /// <returns>Mã tài sản cố định mới</returns>
-        /// created by: NVThinh 16/11/2022
+        /// Author: NVThinh 16/11/2022
         public string GetMaxFixedAssetCode()
         {
 
@@ -59,6 +59,7 @@ namespace MISA.QLTS.DL
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public PagingResult GetFixedAssetByFilterAndPaging(
             string? keyword,
             Guid? departmentID,
@@ -73,7 +74,7 @@ namespace MISA.QLTS.DL
             var parameters = new DynamicParameters();
             parameters.Add("@v_Offset", offset);
             parameters.Add("@v_Limit", limit);
-            parameters.Add("@v_Sort", "modified_date DESC");
+            parameters.Add("@v_Sort", "fixed_asset_code DESC");
 
             // Chuẩn bị cho điều kiện where
             string whereClause = "";
@@ -126,10 +127,12 @@ namespace MISA.QLTS.DL
                 {
                     var employees = multipleResults.Read<FixedAsset>().ToList();
                     var totalOfRecords = multipleResults.Read<int>().Single();
+                    //var totalOfQuantities = multipleResults.Read<int>().Single();
                     return new PagingResult
                     {
                         Data = employees,
-                        totalOfRecords = totalOfRecords
+                        TotalOfRecords = totalOfRecords,
+                        //TotalOfQuantities = totalOfQuantities,
                     };
                 }
             }
@@ -146,42 +149,41 @@ namespace MISA.QLTS.DL
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset)
         {
             // Chuẩn bị tên Stored procedure
             string procedureName = "Proc_CreateAsset";
 
             // Chuẩn bị tham số đầu vào cho stored procedure
-            var parameters = new DynamicParameters();
             var newID = Guid.NewGuid();
-            Console.WriteLine(newID);
-            parameters.Add("@fixed_asset_id", newID);
-            parameters.Add("@fixed_asset_code", fixedAsset.fixed_asset_code);
-            parameters.Add("@fixed_asset_name", fixedAsset.fixed_asset_name);
-            parameters.Add("@department_id", fixedAsset.department_id);
-            parameters.Add("@department_code", fixedAsset.department_code);
-            parameters.Add("@department_name", fixedAsset.department_name);
-            parameters.Add("@fixed_asset_category_id", fixedAsset.fixed_asset_category_id);
-            parameters.Add("@fixed_asset_category_code", fixedAsset.fixed_asset_category_code);
-            parameters.Add("@fixed_asset_category_name", fixedAsset.fixed_asset_category_name);
-            parameters.Add("@purchase_date", fixedAsset.purchase_date);
-            parameters.Add("@cost", fixedAsset.cost);
-            parameters.Add("@quantity", fixedAsset.quantity);
-            parameters.Add("@depreciation_rate", fixedAsset.depreciation_rate);
-            parameters.Add("@tracked_year", fixedAsset.tracked_year);
-            parameters.Add("@life_time", fixedAsset.life_time);
-            parameters.Add("@production_date", fixedAsset.production_date);
-            parameters.Add("@created_by", "Nguyen Van Thinh");
-            parameters.Add("@created_date", DateTime.Now);
-            parameters.Add("@modified_by", "Nguyen Van Thinh");
-            parameters.Add("@modified_date", DateTime.Now);
+            fixedAsset.fixed_asset_id = newID;
+            fixedAsset.created_by = "Nguyễn Văn Thịnh";
+            //var parameters = new DynamicParameters();
+            //Console.WriteLine(newID);
+            //parameters.Add("@fixed_asset_id", newID);
+            //parameters.Add("@fixed_asset_code", fixedAsset.fixed_asset_code);
+            //parameters.Add("@fixed_asset_name", fixedAsset.fixed_asset_name);
+            //parameters.Add("@department_id", fixedAsset.department_id);
+            //parameters.Add("@department_code", fixedAsset.department_code);
+            //parameters.Add("@department_name", fixedAsset.department_name);
+            //parameters.Add("@fixed_asset_category_id", fixedAsset.fixed_asset_category_id);
+            //parameters.Add("@fixed_asset_category_code", fixedAsset.fixed_asset_category_code);
+            //parameters.Add("@fixed_asset_category_name", fixedAsset.fixed_asset_category_name);
+            //parameters.Add("@purchase_date", fixedAsset.purchase_date);
+            //parameters.Add("@cost", fixedAsset.cost);
+            //parameters.Add("@quantity", fixedAsset.quantity);
+            //parameters.Add("@depreciation_rate", fixedAsset.depreciation_rate);
+            //parameters.Add("@tracked_year", fixedAsset.tracked_year);
+            //parameters.Add("@life_time", fixedAsset.life_time);
+            //parameters.Add("@production_date", fixedAsset.production_date);
+            
 
             //Khởi tạo kết nối DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
                 // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-                var numberOfRowsAffected = mySqlConnection.Execute(procedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                var numberOfRowsAffected = mySqlConnection.Execute(procedureName, fixedAsset, commandType: System.Data.CommandType.StoredProcedure);
 
                 if (numberOfRowsAffected > 0)
 
@@ -202,8 +204,9 @@ namespace MISA.QLTS.DL
         /// <summary>
         /// Xóa nhiều bản ghi
         /// </summary>
-        /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
+        /// <param name="fixedAssetIDs">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
         {
             //Khởi tạo kết nối DB MySQL
@@ -256,7 +259,7 @@ namespace MISA.QLTS.DL
         /// <param name="fixedAssetID">ID tài sản được cập nhật</param>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
             // Chuẩn bị tên Stored procedure
@@ -316,6 +319,7 @@ namespace MISA.QLTS.DL
         /// </summary>
         /// <param name="fixedAssetID">ID tài sản cần xóa</param>
         /// <returns>ID tài sản được xóa</return
+        /// <author>NVThinh 27/11/2022</author>
         public int DeleteFixedAsset(Guid fixedAssetID)
         {
             // Chuẩn bị tên Stored procedure

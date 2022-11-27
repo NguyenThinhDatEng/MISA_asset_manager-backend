@@ -32,7 +32,7 @@ namespace MISA.QLTS.BL
         /// Lấy thông tin toàn bộ bản ghi
         /// </summary>
         /// <returns>Danh sách bản ghi</returns>
-        /// Create by: NVThinh (16/11/2022)
+        /// Author: NVThinh (16/11/2022)
         public IEnumerable<T> GetAllRecords()
         {
             return _baseDL.GetAllRecords();
@@ -43,7 +43,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="recordID">ID bản ghi muốn lấy</param>
         /// <returns>Thông tin bản ghi theo ID</returns>
-        /// Create by: NVThinh (16/11/2022)
+        /// Author: NVThinh (16/11/2022)
         public T GetByID(Guid recordID)
         {
             return _baseDL.GetByID(recordID);

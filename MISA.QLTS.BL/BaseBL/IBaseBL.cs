@@ -12,7 +12,7 @@ namespace MISA.QLTS.BL
         /// Lấy thông tin toàn bộ bản ghi
         /// </summary>
         /// <returns>Danh sách bản ghi</returns>
-        /// Create by: NVThinh (16/11/2022)
+        /// Author: NVThinh (16/11/2022)
         public IEnumerable<T> GetAllRecords();
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="recordID">ID bản ghi muốn lấy</param>
         /// <returns>Thông tin bản ghi theo ID</returns>
-        /// Create by: NVThinh (16/11/2022)
+        /// Author: NVThinh (16/11/2022)
         public T GetByID(Guid recordID);
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace MISA.QLTS.BL
         /// <param name="recordCode">Mã bản ghi</param>
         /// <param name="recordID">ID bản ghi</param>
         /// <returns>Boolean</returns>
-        /// Created by: NVThinh (21/11/2022)
+        /// Author: NVThinh (21/11/2022)
         public bool CheckDuplicateCode(string recordCode, Guid recordID);
     }
 }

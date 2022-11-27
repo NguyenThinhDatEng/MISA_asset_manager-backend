@@ -35,7 +35,7 @@ namespace MISA.QLTS.BL
         /// API lấy mã tài sản cố định mới
         /// </summary>
         /// <returns>Mã tài sản cố định mới</returns>
-        /// created by: NVThinh 16/11/2022
+        /// Author: NVThinh 16/11/2022
         public string GetMaxFixedAssetCode()
         {
             return _fixedAssetDL.GetMaxFixedAssetCode();
@@ -50,6 +50,7 @@ namespace MISA.QLTS.BL
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public PagingResult GetFixedAssetByFilterAndPaging(string? keyword, Guid? departmentID, Guid? fixedAssetCategoryID, int offset = 0, int limit = 20)
         {
             return _fixedAssetDL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit);
@@ -64,7 +65,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset)
         {
             var validateResult = ValidateRequestData(fixedAsset);
@@ -78,7 +79,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
         {
             return _fixedAssetDL.DeleteMultipleFixedAsset(fixedAssetIDs);
@@ -94,7 +95,7 @@ namespace MISA.QLTS.BL
         /// <param name="fixedAssetID">ID tài sản được cập nhật</param>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset)
         {
             var validateResult = ValidateRequestData(fixedAsset);
@@ -112,7 +113,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="fixedAssetID">ID tài sản cần xóa</param>
         /// <returns>ID tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         public int DeleteFixedAsset(Guid fixedAssetID)
         {
             return _fixedAssetDL.DeleteFixedAsset(fixedAssetID);
@@ -125,7 +126,7 @@ namespace MISA.QLTS.BL
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>Data transfer object</returns>
-        /// Created by: NVThinh 23/11/2022
+        /// Author: NVThinh 23/11/2022
         public ServiceResponse ValidateRequestData(FixedAsset fixedAsset)
         {
             try

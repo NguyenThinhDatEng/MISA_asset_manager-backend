@@ -13,6 +13,12 @@ namespace MISA.QLTS.Common.Attributes
     {
         #region Method
 
+        /// <summary>
+        /// Kiểm tra dữ liệu kiểu số có chỉ gồm các ký tự số hay không
+        /// </summary>
+        /// <param name="value">là 1 object có 1 thuộc tính</param>
+        /// <returns>true nếu giá trị toàn ký tự số</returns>
+        /// <author>NVThinh 27/11/2022</author>
         public override bool IsValid(object? value)
         {
             // Nếu dữ liệu là kiểu text

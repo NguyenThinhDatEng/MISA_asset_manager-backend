@@ -39,6 +39,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
+        /// <author>NVThinh 27/11/2022</author>
         [HttpGet("filter")]
         public IActionResult GetFixedAssetByFilterAndPaging(
             [FromQuery] string? keyword,
@@ -80,7 +81,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// API lấy mã tài sản cố định mới
         /// </summary>
         /// <returns>Mã tài sản cố định mới</returns>
-        /// created by: NVThinh 16/11/2022
+        /// Author: NVThinh 16/11/2022
         [HttpGet("newAssetCode")]
         public IActionResult GetMaxFixedAssetCode()
         {
@@ -113,7 +114,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID tài sản cố định được thêm</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         [HttpPost]
         public IActionResult InsertFixedAsset([FromBody] FixedAsset fixedAsset)
         {
@@ -146,7 +147,19 @@ namespace MISA.QLTS.COMMON.Controllers
                 }
 
                 // Thành công
-                return StatusCode(StatusCodes.Status201Created, fixedAsset);
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            catch(ArgumentException ex)
+            {
+                // Exception thiếu tham số đầu vào
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                {
+                    ErrorCode = QLTSErrorCode.Exception,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message},
+                    TraceID = HttpContext.TraceIdentifier
+                });
             }
             catch (Exception ex)
             {
@@ -166,7 +179,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// </summary>
         /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
         /// <returns>Số lượng tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         [HttpPost("DeleteBatch")]
         public IActionResult DeleteMultipleFixedAsset([FromBody] ListFixedAssetID fixedAssetIDs)
         {
@@ -205,7 +218,6 @@ namespace MISA.QLTS.COMMON.Controllers
 
         #endregion
 
-
         #region PUT
 
         /// <summary>
@@ -214,7 +226,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// <param name="fixedAssetID">ID tài sản được cập nhật</param>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
         /// <returns>ID bản ghi được cập nhật</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         [HttpPut("{fixedAssetID}")]
         public IActionResult UpdateFixedAsset([FromRoute] Guid fixedAssetID, [FromBody] FixedAsset fixedAsset)
         {
@@ -247,7 +259,7 @@ namespace MISA.QLTS.COMMON.Controllers
                 }
 
                 // Thành công
-                return StatusCode(StatusCodes.Status200OK, fixedAsset);
+                return StatusCode(StatusCodes.Status200OK);
             }
             catch (Exception ex)
             {
@@ -271,7 +283,7 @@ namespace MISA.QLTS.COMMON.Controllers
         /// </summary>
         /// <param name="fixedAssetID">ID tài sản cần xóa</param>
         /// <returns>ID tài sản được xóa</returns>
-        /// Created by: NVThinh (11/11/2022)
+        /// Author: NVThinh (11/11/2022)
         [HttpDelete("{fixedAssetID}")]
         public IActionResult DeleteFixedAsset([FromRoute] Guid fixedAssetID)
         {

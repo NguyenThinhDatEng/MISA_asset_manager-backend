@@ -119,6 +119,7 @@
   </resheader>
   <data name="DevMsg_Bad_Request" xml:space="preserve">
     <value>Bad Request</value>
+    <comment>Trả về cho development khi có lỗi 400</comment>
   </data>
   <data name="DevMsg_Exception" xml:space="preserve">
     <value>Catched an exception</value>
@@ -130,6 +131,7 @@
   </data>
   <data name="UserMsg_Bad_Request" xml:space="preserve">
     <value>Yêu cầu không hợp lệ</value>
+    <comment>Trả về cho người dùng khi có lỗi 400</comment>
   </data>
   <data name="UserMsg_Department_Code" xml:space="preserve">
     <value>Mã bộ phận sử dụng phải có tiền tố là D, số tăng dần bắt đầu từ 001</value>
@@ -141,9 +143,11 @@
   </data>
   <data name="UserMsg_Exception" xml:space="preserve">
     <value>Vui lòng liên hệ MISA</value>
+    <comment>Trả về cho người dùng khi có lỗi trong server</comment>
   </data>
   <data name="UserMsg_Fail" xml:space="preserve">
     <value>Yêu cầu thất bại</value>
+    <comment>Trả về cho người dùng khi thực hiện API không thành công</comment>
   </data>
   <data name="UserMsg_Fixed_Asset_Category_Code" xml:space="preserve">
     <value>Mã loại tài sản phải có tiền tố là AC, số tăng dần bắt đầu từ 001</value>
