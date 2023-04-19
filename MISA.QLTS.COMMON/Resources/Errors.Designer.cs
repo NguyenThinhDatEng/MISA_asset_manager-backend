@@ -79,11 +79,29 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Giao dịch thất bại.
+        /// </summary>
+        public static string DevMsg_Fail_Transaction {
+            get {
+                return ResourceManager.GetString("DevMsg_Fail_Transaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Found.
         /// </summary>
         public static string DevMsg_Not_Found {
             get {
                 return ResourceManager.GetString("DevMsg_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thông tin đăng nhập không hợp lệ.
+        /// </summary>
+        public static string DevMsg_Unauthorized {
+            get {
+                return ResourceManager.GetString("DevMsg_Unauthorized", resourceCulture);
             }
         }
         
@@ -133,6 +151,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xóa nhiều bản ghi thất bại.
+        /// </summary>
+        public static string UserMsg_Fail_Delelte_Batch {
+            get {
+                return ResourceManager.GetString("UserMsg_Fail_Delelte_Batch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã loại tài sản phải có tiền tố là AC, số tăng dần bắt đầu từ 001.
         /// </summary>
         public static string UserMsg_Fixed_Asset_Category_Code {
@@ -151,6 +178,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tỉ lệ hao mòn phải bằng 1/Số năm sử dụng.
+        /// </summary>
+        public static string UserMsg_Life_Time_OR_Depreciation_Rate {
+            get {
+                return ResourceManager.GetString("UserMsg_Life_Time_OR_Depreciation_Rate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có nhiều attributes được custom cùng kiểu dữ liệu áp dụng vào một property của entity.
         /// </summary>
         public static string UserMsg_Multiple_Attributes_Same_Type {
@@ -165,6 +201,15 @@ namespace MISA.QLTS.Common.Resources {
         public static string UserMsg_Not_Found {
             get {
                 return ResourceManager.GetString("UserMsg_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tên đăng nhập hoặc mật khẩu không phù hợp.
+        /// </summary>
+        public static string UserMsg_Unauthorized {
+            get {
+                return ResourceManager.GetString("UserMsg_Unauthorized", resourceCulture);
             }
         }
         

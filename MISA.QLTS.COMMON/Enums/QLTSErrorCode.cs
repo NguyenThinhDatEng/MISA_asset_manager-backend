@@ -34,6 +34,11 @@ namespace MISA.QLTS.Common.Enums
         /// <summary>
         /// Lỗi xác thực dữ liệu
         /// </summary>
-        Validate = 5
+        Validate = 5,
+
+        /// <summary>
+        /// Lỗi xác thực danh tính
+        /// </summary>
+        Unauthorized = 6,
     }
 }

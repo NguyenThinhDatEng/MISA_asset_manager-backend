@@ -5,10 +5,12 @@ using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Entitites.DTO;
 using MISA.QLTS.API.Controllers;
 using MISA.QLTS.Common.Resources;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MISA.QLTS.COMMON.Controllers
 {
-    [ApiController]
+    [Authorize]
     public class FixedAssetsController : BasesController<FixedAsset>
     {
         #region Field
@@ -34,27 +36,31 @@ namespace MISA.QLTS.COMMON.Controllers
         /// API lấy tài sản theo bộ lọc và phân trang
         /// </summary>
         /// <param name="keyword">Từ khóa tìm kiếm</param>
-        /// <param name="departmentID">ID bộ phận sử dụng</param>
-        /// <param name="fixedAssetCategoryID">ID mã bộ phận sử dụng</param>
+        /// <param name="departmentID">Mảng ID bộ phận sử dụng</param>
+        /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
+        /// <param name="isIncrement">true nếu danh sách là ghi tăng chứng từ</param>
+        /// <param name="selectedIDs">mảng chứa các ID đã được lựa chọn để ghi tăng chứng từ</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
-        /// <author>NVThinh 27/11/2022</author>
-        [HttpGet("filter")]
+        /// <author>NVThinh 11/1/2023</author>
+        [HttpPost("filter")]
         public IActionResult GetFixedAssetByFilterAndPaging(
             [FromQuery] string? keyword,
             [FromQuery] Guid departmentID,
             [FromQuery] Guid fixedAssetCategoryID,
             [FromQuery] int offset = 0,
-            [FromQuery] int limit = 20)
+            [FromQuery] int limit = 20,
+            [FromQuery] bool isIncrement = false,
+            [FromBody] List<Guid>? selectedIDs = null)
         {
             try
             {
                 // Gọi đến Business layer
-                var pagingResult = _fixedAssetBL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit);
+                var pagingResult = _fixedAssetBL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit, isIncrement, selectedIDs);
 
                 // Nếu thành công
-                if (pagingResult != null)
+                if (pagingResult.TotalOfRecords > -1)
                     return StatusCode(StatusCodes.Status200OK, pagingResult);
                 // Thất bại
                 return StatusCode(StatusCodes.Status404NotFound, new ErrorResult
@@ -71,8 +77,7 @@ namespace MISA.QLTS.COMMON.Controllers
                     ErrorCode = QLTSErrorCode.Exception,
                     DevMsg = Errors.DevMsg_Exception,
                     UserMsg = Errors.UserMsg_Exception,
-                    MoreInfo = new List<string> { ex.Message },
-                    TraceID = HttpContext.TraceIdentifier
+                    MoreInfo = new List<string> { ex.Message }
                 });
             }
         }
@@ -100,7 +105,34 @@ namespace MISA.QLTS.COMMON.Controllers
                     DevMsg = Errors.DevMsg_Exception,
                     UserMsg = Errors.UserMsg_Exception,
                     MoreInfo = new List<string> { ex.Message },
-                    TraceID = HttpContext.TraceIdentifier,
+                });
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra các tài sản đã có chứng từ chưa
+        /// </summary>
+        /// <param name="fixedAssetIDs">Danh sách ID tài sản</param>
+        /// <returns>Mã chứng từ</returns>
+        /// <author>NVThinh 16/1/2023</author>
+        [HttpPost("checkVoucher")]
+        public IActionResult CheckExistedVoucher([FromBody] List<Guid> fixedAssetIDs)
+        {
+            try
+            {
+                // Gọi đến Business Layer
+                var voucherCode = _fixedAssetBL.CheckExistedVoucher(fixedAssetIDs);
+                // Trả về cho Client
+                return StatusCode(StatusCodes.Status200OK, voucherCode);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                {
+                    ErrorCode = QLTSErrorCode.Exception,
+                    DevMsg = Errors.DevMsg_Exception,
+                    UserMsg = Errors.UserMsg_Exception,
+                    MoreInfo = new List<string> { ex.Message },
                 });
             }
         }
@@ -108,7 +140,6 @@ namespace MISA.QLTS.COMMON.Controllers
         #endregion
 
         #region POST
-
         /// <summary>
         /// API Tạo mới tài sản cố định
         /// </summary>
@@ -157,8 +188,7 @@ namespace MISA.QLTS.COMMON.Controllers
                     ErrorCode = QLTSErrorCode.Exception,
                     DevMsg = Errors.DevMsg_Exception,
                     UserMsg = Errors.UserMsg_Exception,
-                    MoreInfo = new List<string> { ex.Message},
-                    TraceID = HttpContext.TraceIdentifier
+                    MoreInfo = new List<string> { ex.Message}
                 });
             }
             catch (Exception ex)
@@ -169,49 +199,6 @@ namespace MISA.QLTS.COMMON.Controllers
                     DevMsg = Errors.DevMsg_Exception,
                     UserMsg = Errors.UserMsg_Fail,
                     MoreInfo = new List<string> { ex.Message },
-                    TraceID = HttpContext.TraceIdentifier,
-                });
-            }
-        }
-
-        /// <summary>
-        /// Xóa nhiều bản ghi
-        /// </summary>
-        /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
-        /// <returns>Số lượng tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        [HttpPost("DeleteBatch")]
-        public IActionResult DeleteMultipleFixedAsset([FromBody] ListFixedAssetID fixedAssetIDs)
-        {
-            try
-            {
-                // Gọi đến Business Layer
-                var serviceResponse = _fixedAssetBL.DeleteMultipleFixedAsset(fixedAssetIDs);
-
-                // Xử lý kết quả trả về từ DB (GridReader)
-                if (serviceResponse.Success)
-                    return StatusCode(StatusCodes.Status200OK, new
-                    {
-                        FixedAssetIDList = fixedAssetIDs,
-                    });
-                else
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
-                    {
-                        ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = Errors.DevMsg_Bad_Request,
-                        UserMsg = Errors.UserMsg_Bad_Request,
-                        MoreInfo = serviceResponse.Data
-                    });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
-                {
-                    ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Errors.DevMsg_Exception,
-                    UserMsg = Errors.UserMsg_Exception,
-                    MoreInfo = new List<string> { ex.Message },
-                    TraceID = HttpContext.TraceIdentifier
                 });
             }
         }
@@ -270,52 +257,6 @@ namespace MISA.QLTS.COMMON.Controllers
                     UserMsg = Errors.UserMsg_Fail,
                     MoreInfo = new List<string> { ex.Message },
                     TraceID = HttpContext.TraceIdentifier,
-                });
-            }
-        }
-
-        #endregion
-
-        #region DELETE
-
-        /// <summary>
-        /// API Xóa 01 tài sản
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản cần xóa</param>
-        /// <returns>ID tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        [HttpDelete("{fixedAssetID}")]
-        public IActionResult DeleteFixedAsset([FromRoute] Guid fixedAssetID)
-        {
-            try
-            {
-                // Gọi đến Business Layer
-                var numberOfRowsAffected = _fixedAssetBL.DeleteFixedAsset(fixedAssetID);
-
-                // Xử lý kết quả trả về
-                if (numberOfRowsAffected > 0)
-                    // Thành công
-                    return StatusCode(StatusCodes.Status200OK, new
-                    {
-                        FixedAssetID = fixedAssetID,
-                    });
-                else
-                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
-                    {
-                        ErrorCode = QLTSErrorCode.BadRequest,
-                        DevMsg = Errors.DevMsg_Bad_Request,
-                        UserMsg = Errors.UserMsg_Fail,
-                    });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
-                {
-                    ErrorCode = QLTSErrorCode.Exception,
-                    DevMsg = Errors.DevMsg_Exception,
-                    UserMsg = Errors.UserMsg_Exception,
-                    MoreInfo = new List<string> { ex.Message },
-                    TraceID = HttpContext.TraceIdentifier
                 });
             }
         }

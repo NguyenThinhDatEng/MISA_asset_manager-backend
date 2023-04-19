@@ -1,10 +1,5 @@
 ﻿using MISA.QLTS.Common.Entitites;
 using MISA.QLTS.Common.Entitites.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MISA.QLTS.DL
 {
@@ -13,9 +8,9 @@ namespace MISA.QLTS.DL
         /// <summary>
         /// API lấy mã tài sản cố định mới
         /// </summary>
-        /// <returns>Mã tài sản cố định mới</returns>
+        /// <returns>Mã tài sản tiếp theo</returns>
         /// Author: NVThinh 16/11/2022
-        public string GetMaxFixedAssetCode();
+        public string GetNextCode();
 
         /// <summary>
         /// API lấy tài sản theo bộ lọc và phân trang
@@ -25,14 +20,26 @@ namespace MISA.QLTS.DL
         /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
+        /// <param name="isIncrement">true nếu danh sách là ghi tăng chứng từ</param>
+        /// <param name="selectedIDs">mảng chứa các ID đã được lựa chọn để ghi tăng chứng từ</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
-        /// <author>NVThinh 27/11/2022</author>
-        public PagingResult GetFixedAssetByFilterAndPaging(
+        /// <author>NVThinh 11/1/2023</author>
+        public PagingResult<FixedAsset> GetFixedAssetByFilterAndPaging(
             string? keyword,
             Guid? departmentID,
             Guid? fixedAssetCategoryID,
-            int offset = 0,
-            int limit = 20);
+            int offset,
+            int limit,
+            bool isIncrement,
+            List<Guid>? selectedIDs);
+
+        /// <summary>
+        /// Kiểm tra các tài sản đã có chứng từ chưa
+        /// </summary>
+        /// <param name="fixedAssetIDs">Danh sách các ID tài sản</param>
+        /// <returns>Mã chứng từ</returns>
+        /// <author>NVThinh 16/1/2023</author>
+        public string CheckExistedVoucher(List<Guid> fixedAssetIDs);
 
         /// <summary>
         /// API Tạo mới tài sản cố định
@@ -50,21 +57,5 @@ namespace MISA.QLTS.DL
         /// <returns>ID bản ghi được cập nhật</returns>
         /// Author: NVThinh (11/11/2022)
         public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset);
-
-        /// <summary>
-        /// API Xóa 01 tài sản
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản cần xóa</param>
-        /// <returns>ID tài sản được xóa</return
-        /// <author>NVThinh 27/11/2022</author>
-        public int DeleteFixedAsset(Guid fixedAssetID);
-
-        /// <summary>
-        /// Xóa nhiều bản ghi
-        /// </summary>
-        /// <param name="fixedAssetIDs">Danh sách ID các tài sản cần xóa</param>
-        /// <returns>Số lượng tài sản được xóa</returns>
-        /// <author>NVThinh 27/11/2022</author>
-        public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs);
     }
 }

@@ -21,18 +21,30 @@ namespace MISA.QLTS.BL
         /// API lấy tài sản theo bộ lọc và phân trang
         /// </summary>
         /// <param name="keyword">Từ khóa tìm kiếm</param>
-        /// <param name="departmentIDs">Mảng ID bộ phận sử dụng</param>
-        /// <param name="fixedAssetCategoryIDs">Mảng ID mã bộ phận sử dụng</param>
+        /// <param name="departmentID">Mảng ID bộ phận sử dụng</param>
+        /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
+        /// <param name="isIncrement">true nếu danh sách là ghi tăng chứng từ</param>
+        /// <param name="selectedIDs">mảng chứa các ID đã được lựa chọn để ghi tăng chứng từ</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
-        /// <author>NVThinh 27/11/2022</author>
-        public PagingResult GetFixedAssetByFilterAndPaging(
+        /// <author>NVThinh 11/1/2023</author>
+        public PagingResult<FixedAsset> GetFixedAssetByFilterAndPaging(
             string? keyword,
             Guid? departmentID,
             Guid? fixedAssetCategoryID,
-            int offset = 0,
-            int limit = 20);
+            int offset,
+            int limit,
+            bool isIncrement,
+            List<Guid>? selectedIDs);
+
+        /// <summary>
+        /// Kiểm tra các tài sản đã có chứng từ chưa
+        /// </summary>
+        /// <param name="fixedAssetIDs">Danh sách các ID tài sản</param>
+        /// <returns>Mã chứng từ</returns>
+        /// <author>NVThinh 16/1/2023</author>
+        public string CheckExistedVoucher(List<Guid> fixedAssetIDs);
 
         /// <summary>
         /// API Tạo mới tài sản cố định
@@ -50,22 +62,6 @@ namespace MISA.QLTS.BL
         /// <returns>ID bản ghi được cập nhật</returns>
         /// Author: NVThinh (11/11/2022)
         public ServiceResponse UpdateFixedAsset(Guid fixedAssetID, FixedAsset fixedAsset);
-
-        /// <summary>
-        /// API Xóa 01 tài sản
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản cần xóa</param>
-        /// <returns>ID tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        public int DeleteFixedAsset(Guid fixedAssetID);
-
-        /// <summary>
-        /// Xóa nhiều bản ghi
-        /// </summary>
-        /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
-        /// <returns>Số lượng tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs);
 
         /// <summary>
         /// Validate dữ liệu 

@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MISA.QLTS.API.Controllers;
@@ -9,8 +11,7 @@ using MySqlConnector;
 
 namespace MISA.QLTS.COMMON.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
+    [Authorize]
     public class FixedAssetCategoriesController : BasesController<FixedAssetCategory>
     {
         #region Field

@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.COMMON.csproj",
-      "projectName": "MISA.QLTS.COMMON",
-      "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.COMMON.csproj",
+      "projectUniqueName": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj",
+      "projectName": "MISA.QLTS.Common",
+      "projectPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\MISA.QLTS.Common.csproj",
       "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\thinh\\source\\repos\\MISA.QLTS\\MISA.QLTS.COMMON\\obj\\",
       "projectStyle": "PackageReference",
@@ -61,7 +61,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -24,14 +24,13 @@ namespace MISA.QLTS.Common.Entitites
         /// Ma tai san
         /// </summary>
         [RequiredField(field: "Mã tài sản")]
-        [Form("Mã tài sản")] // Định dạng mã tài sản
-        public string fixed_asset_code { get; set; }
+        public string? fixed_asset_code { get; set; }
 
         /// <summary>
         /// Ten tai san
         /// </summary>
         [RequiredField(field: "Tên tài sản")]
-        public string fixed_asset_name { get; set; }
+        public string? fixed_asset_name { get; set; }
 
         /// <summary>
         /// ID bo phan su dung
@@ -43,14 +42,13 @@ namespace MISA.QLTS.Common.Entitites
         /// Ma bo phan su dung
         /// </summary>
         [RequiredField(field: "Mã bộ phận sử dụng")]
-        [Form("Mã bộ phận sử dụng")] // Định dạng mã bộ phận sử dụng
-        public string department_code { get; set; }
+        public string? department_code { get; set; }
 
         /// <summary>
         /// Ten bo phan su dung
         /// </summary>
         [RequiredField(field: "Tên bộ phận sử dụng")]
-        public string department_name { get; set; }
+        public string? department_name { get; set; }
 
         /// <summary>
         /// ID loai tai san
@@ -62,14 +60,13 @@ namespace MISA.QLTS.Common.Entitites
         /// Ma loai tai san
         /// </summary>
         [RequiredField(field: "Mã loại tài sản")]
-        [Form("Mã loại tài sản")] // Định dạng mã loại tài sản
-        public string fixed_asset_category_code { get; set; }
+        public string? fixed_asset_category_code { get; set; }
 
         /// <summary>
         /// Ten loai tai san
         /// </summary>
         [RequiredField(field: "Tên loại tài sản")]
-        public string fixed_asset_category_name { get; set; }
+        public string? fixed_asset_category_name { get; set; }
 
         /// <summary>
         /// Ngay mua
@@ -113,7 +110,8 @@ namespace MISA.QLTS.Common.Entitites
         /// </summary>
         [RequiredField(field: "Ngày sử dụng")]
         [Date(field: "Ngày sử dụng")]
-        public DateTime production_date { get; set; } 
+        public DateTime production_date { get; set; }
+
         #endregion
     }
 }

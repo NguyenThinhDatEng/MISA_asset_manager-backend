@@ -5,7 +5,6 @@ using MISA.QLTS.Common.Entitites.DTO;
 using MISA.QLTS.Common.Enums;
 using MISA.QLTS.Common.Resources;
 using MISA.QLTS.DL;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace MISA.QLTS.BL
@@ -38,7 +37,7 @@ namespace MISA.QLTS.BL
         /// Author: NVThinh 16/11/2022
         public string GetMaxFixedAssetCode()
         {
-            return _fixedAssetDL.GetMaxFixedAssetCode();
+            return _fixedAssetDL.GetNextCode();
         }
 
         /// <summary>
@@ -49,11 +48,24 @@ namespace MISA.QLTS.BL
         /// <param name="fixedAssetCategoryID">Mảng ID mã bộ phận sử dụng</param>
         /// <param name="offset">vị trí của bản ghi bắt đầu lấy</param>
         /// <param name="limit">số bản ghi lấy ra</param>
+        /// <param name="isIncrement">true nếu danh sách là ghi tăng chứng từ</param>
+        /// <param name="selectedIDs">mảng chứa các ID đã được lựa chọn để ghi tăng chứng từ</param>
         /// <returns>Danh sách tài sản cố định và tổng số bản ghi</returns>
-        /// <author>NVThinh 27/11/2022</author>
-        public PagingResult GetFixedAssetByFilterAndPaging(string? keyword, Guid? departmentID, Guid? fixedAssetCategoryID, int offset = 0, int limit = 20)
+        /// <author>NVThinh 11/1/2023</author>
+        public PagingResult<FixedAsset> GetFixedAssetByFilterAndPaging(string? keyword, Guid? departmentID, Guid? fixedAssetCategoryID, int offset, int limit, bool isIncrement, List<Guid>? selectedIDs)
         {
-            return _fixedAssetDL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit);
+            return _fixedAssetDL.GetFixedAssetByFilterAndPaging(keyword, departmentID, fixedAssetCategoryID, offset, limit, isIncrement, selectedIDs);
+        }
+
+        /// <summary>
+        /// Kiểm tra các tài sản đã có chứng từ chưa
+        /// </summary>
+        /// <param name="fixedAssetIDs">Danh sách ID tài sản</param>
+        /// <returns>Mã chứng từ</returns>
+        /// <author>NVThinh 16/1/2023</author>
+        public string CheckExistedVoucher(List<Guid> fixedAssetIDs) 
+        {
+            return _fixedAssetDL.CheckExistedVoucher(fixedAssetIDs);
         }
 
         #endregion
@@ -64,7 +76,7 @@ namespace MISA.QLTS.BL
         /// API Tạo mới tài sản cố định
         /// </summary>
         /// <param name="fixedAsset">Đối tượng tài sản cố định</param>
-        /// <returns>ID tài sản cố định được thêm</returns>
+        /// <returns>1 đối tượng ServiceRespone</returns>
         /// Author: NVThinh (11/11/2022)
         public ServiceResponse InsertFixedAsset(FixedAsset fixedAsset)
         {
@@ -72,17 +84,6 @@ namespace MISA.QLTS.BL
             if (!validateResult.Success)
                 return validateResult;
             return _fixedAssetDL.InsertFixedAsset(fixedAsset);
-        }
-
-        /// <summary>
-        /// Xóa nhiều bản ghi
-        /// </summary>
-        /// <param name="listFixedAssetID">Danh sách ID các tài sản cần xóa</param>
-        /// <returns>Số lượng tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        public ServiceResponse DeleteMultipleFixedAsset(ListFixedAssetID fixedAssetIDs)
-        {
-            return _fixedAssetDL.DeleteMultipleFixedAsset(fixedAssetIDs);
         }
 
         #endregion
@@ -106,21 +107,6 @@ namespace MISA.QLTS.BL
 
         #endregion
 
-        #region DELETE
-
-        /// <summary>
-        /// API Xóa 01 tài sản
-        /// </summary>
-        /// <param name="fixedAssetID">ID tài sản cần xóa</param>
-        /// <returns>ID tài sản được xóa</returns>
-        /// Author: NVThinh (11/11/2022)
-        public int DeleteFixedAsset(Guid fixedAssetID)
-        {
-            return _fixedAssetDL.DeleteFixedAsset(fixedAssetID);
-        }
-
-        #endregion
-
         /// <summary>
         /// Validate dữ liệu 
         /// </summary>
@@ -131,19 +117,20 @@ namespace MISA.QLTS.BL
         {
             try
             {
-                var validateFailures = new List<string>(); // mảng các lỗi gặp phải
-
-                // Kiểm tra mã trùng
-                var recordCode = typeof(FixedAsset).GetProperty("fixed_asset_code").GetValue(fixedAsset).ToString();
-                var recordID = typeof(FixedAsset).GetProperty("fixed_asset_id").GetValue(fixedAsset);
+                // Khởi tạo mảng các lỗi gặp phải
+                var validateFailures = new List<string>();
+                // Khởi tạo các biến
+                var recordCode = fixedAsset.fixed_asset_code;
+                var recordID = fixedAsset.fixed_asset_id;
                 recordID = recordID != null ? (Guid)recordID : Guid.Empty;
-                if (_fixedAssetDL.CheckDuplicateCode(recordCode, (Guid)recordID))
+                // Kiểm tra mã trùng
+                if (_fixedAssetDL.CheckDuplicateCode(recordCode, (Guid)recordID, "fixed_asset_id"))
                 {
                     validateFailures.Add(Errors.UserMsg_Duplicate_Key);
                 }
 
                 // Lấy danh sách các properties của đối tượng
-                var properties = typeof(FixedAsset).GetProperties(); // an array
+                var properties = typeof(FixedAsset).GetProperties();
 
                 // Duyệt qua từng property và kiểm tra C# attributes
                 foreach (var property in properties)
@@ -166,14 +153,6 @@ namespace MISA.QLTS.BL
                     if (dateAttribute != null && !dateAttribute.IsValid(propertyValue?.ToString()))
                     {
                         validateFailures.Add(dateAttribute.ErrorMessage);
-                    }
-
-                    // Kiểm tra mã dữ liệu có đúng định dạng không
-                    var formAttribute = (FormAttribute?)Attribute.GetCustomAttribute(property, typeof(FormAttribute));
-                    // Nếu property có thuộc tính Form và có định dạng hợp lệ
-                    if (formAttribute != null && !formAttribute.IsValid(propertyValue?.ToString()))
-                    {
-                        validateFailures.Add(formAttribute.ErrorMessage);
                     }
                 }
 
@@ -204,7 +183,7 @@ namespace MISA.QLTS.BL
                 {
                     Success = false,
                     ErrorCode = QLTSErrorCode.Exception,
-                    Data = new List<string> { ex.Message, Errors.UserMsg_Wrong_Data_Type }
+                    Data = new List<string> { ex.Message, Errors.UserMsg_Exception }
                 };
             }
         }

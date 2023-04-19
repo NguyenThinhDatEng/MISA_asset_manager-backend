@@ -125,9 +125,17 @@
     <value>Catched an exception</value>
     <comment>Có ngoại lệ xảy ra</comment>
   </data>
+  <data name="DevMsg_Fail_Transaction" xml:space="preserve">
+    <value>Giao dịch thất bại</value>
+    <comment>Có lỗi xảy ra khi sử dụng transaction</comment>
+  </data>
   <data name="DevMsg_Not_Found" xml:space="preserve">
     <value>Not Found</value>
     <comment>Không tìm thấy dữ liệu trả về</comment>
+  </data>
+  <data name="DevMsg_Unauthorized" xml:space="preserve">
+    <value>Thông tin đăng nhập không hợp lệ</value>
+    <comment>Login</comment>
   </data>
   <data name="UserMsg_Bad_Request" xml:space="preserve">
     <value>Yêu cầu không hợp lệ</value>
@@ -149,6 +157,10 @@
     <value>Yêu cầu thất bại</value>
     <comment>Trả về cho người dùng khi thực hiện API không thành công</comment>
   </data>
+  <data name="UserMsg_Fail_Delelte_Batch" xml:space="preserve">
+    <value>Xóa nhiều bản ghi thất bại</value>
+    <comment>Lỗi xảy ra khi 1 hoặc nhiều ID bản ghi không có trong database</comment>
+  </data>
   <data name="UserMsg_Fixed_Asset_Category_Code" xml:space="preserve">
     <value>Mã loại tài sản phải có tiền tố là AC, số tăng dần bắt đầu từ 001</value>
     <comment>Lỗi nhập sai định dạng mã loại tài sản</comment>
@@ -157,6 +169,10 @@
     <value>Mã nhân viên phải có tiền tố là TS, số tăng dần bắt đầu từ 00001</value>
     <comment>Lỗi nhập sai định dạng mã tài sản</comment>
   </data>
+  <data name="UserMsg_Life_Time_OR_Depreciation_Rate" xml:space="preserve">
+    <value>Tỉ lệ hao mòn phải bằng 1/Số năm sử dụng</value>
+    <comment>Lỗi nghiệp vụ</comment>
+  </data>
   <data name="UserMsg_Multiple_Attributes_Same_Type" xml:space="preserve">
     <value>Có nhiều attributes được custom cùng kiểu dữ liệu áp dụng vào một property của entity</value>
     <comment>Ngoại lệ AmbiguousMatchException</comment>
@@ -164,6 +180,10 @@
   <data name="UserMsg_Not_Found" xml:space="preserve">
     <value>Không tìm thấy dữ liệu trả về</value>
     <comment>Không tìm thấy dữ liệu trả về</comment>
+  </data>
+  <data name="UserMsg_Unauthorized" xml:space="preserve">
+    <value>Tên đăng nhập hoặc mật khẩu không phù hợp</value>
+    <comment>Login</comment>
   </data>
   <data name="UserMsg_Wrong_Data_Type" xml:space="preserve">
     <value>Sai kiểu dữ liệu truyền vào</value>

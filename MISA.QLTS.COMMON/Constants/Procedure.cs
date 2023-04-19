@@ -22,5 +22,20 @@ namespace MISA.QLTS.Common.Constants
         /// Format tên procedure lấy bản ghi theo mã
         /// </summary>
         public static string GET_BY_CODE = "Proc_Get{0}ByCode";
+
+        /// <summary>
+        /// Format tên procedure Lấy mã mới nhất
+        /// </summary>
+        public static string GET_LAST_CODE = "Proc_Get{0}LastCode";
+
+        /// <summary>
+        /// Format tên procedure Xóa 1 bản ghi theo ID
+        /// </summary>
+        public static string DELETE_BY_ID = "Proc_Delete{0}ByID";
+
+        /// <summary>
+        /// Format tên procedure Xóa nhiều bản ghi
+        /// </summary>
+        public static string DELETE_MULTIPLE = "Proc_DeleteMultiple{0}";
     }
 }
